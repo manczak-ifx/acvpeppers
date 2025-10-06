@@ -1,0 +1,14 @@
+[2025-10-01 10:29:23] INFO  Created test session: 656819
+
+[2025-10-01 10:29:23] INFO  Config: lvl=info, dir=logs, wire=false, redact=true
+
+[2025-10-01 10:30:24] INFO  Vector sets ready: 1
+
+[2025-10-01 10:30:35] INFO  Fetching vector set: /acvp/v1/testSessions/656819/vectorSets/3414974
+
+[2025-10-01 10:30:35] INFO  Downloaded vector set 3414974
+
+[2025-10-01 10:30:35] INFO  Executing vector set 3414974
+
+[2025-10-01 10:30:37] INFO  Uploaded results for VS 3414974
+

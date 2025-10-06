@@ -1,0 +1,16 @@
+[2025-10-01 05:32:27] INFO  Created test session: 656757
+
+[2025-10-01 05:32:27] INFO  Config: lvl=info, dir=logs, wire=false, redact=true
+
+[2025-10-01 05:33:27] INFO  Vector sets ready: 1
+
+[2025-10-01 05:33:28] INFO  Fetching vector set: /acvp/v1/testSessions/656757/vectorSets/3414762
+
+[2025-10-01 05:33:28] INFO  Downloaded vector set 3414762
+
+[2025-10-01 05:33:28] INFO  Executing vector set 3414762
+
+[2025-10-01 05:33:28] ERROR LDT: algo streaming unsupported (streaming not supported) (tcId 514)
+
+[2025-10-01 05:33:30] INFO  Uploaded results for VS 3414762
+

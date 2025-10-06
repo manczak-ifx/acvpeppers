@@ -1,8 +1,10 @@
 [package]
-name = "myproject"
+name = "ACVPeppers"
 version = "0.1.0"
 edition = "2021"
-
+[[bin]]
+name="peppers"
+path="src/main.rs"
 [dependencies]
 curl = "0.4.49"
 reqwest = { version = "0.12.23", features = ["blocking", "json","native-tls"] }
@@ -19,7 +21,15 @@ base64 = "0.22.1"
 hmac = "0.12"
 anyhow = "1.0"
 url = "2.5.7"
-clap = { version = "4.5", features = ["derive"] }
+clap = { version = "4.5", features = ["derive","env"] }
 log = "0.4"
-flexi_logger = "0.27"
+flexi_logger = {version ="0.27", features=["specfile_without_notification"]}
 toml = "0.8"
+owo-colors = "4"
+colored = "2.1"
+once_cell="1.19"
+aes = "0.8"
+cipher="0.4.4"
+cbc ="0.1.2"
+ecb="0.1.2"
+

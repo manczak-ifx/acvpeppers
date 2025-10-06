@@ -1,0 +1,14 @@
+log_level = "debug"
+log_dir = "logs"
+wire_log = true
+redact = true
+max_body_chars = 4000
+log_vectors = true
+log_results = true 
+log_uploads = true 
+log_downloads = true 
+base_url = "https://demo.acvts.nist.gov/acvp/v1/"
+client_pkcs12_path = "src/acvp_client/certs/client.p12"
+client_pkcs12_password = "***REMOVED***"
+totp_file_path = "src/acvp_client/certs/totp.txt"
+capability_file = "src/capabilities.json"

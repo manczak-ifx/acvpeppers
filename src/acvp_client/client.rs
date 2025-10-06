@@ -25,7 +25,7 @@ impl AcvpClient {
     pub fn from_pkcs12(base_url: &str, p12_path: &str, p12_password: &str, _otp_seed_path_hint: &str) -> Result<Self> {
         let der = fs::read(p12_path)?;
         let identity = Identity::from_pkcs12_der(&der, p12_password)?;
-        let http = Client::builder().identity(identity).build()?;
+        let http = Client::builder().connect_timeout(Duration::from_secs(10)).identity(identity).build()?;
 
         Ok(Self {
             base_url: ensure_trailing_slash(base_url),

@@ -2,11 +2,7 @@ use crate::cryptography::CryptoOperation;
 use crate::parser::TestCase;
 use crate::result_format::TestCaseResult;
 
-pub struct MCT;
-
-impl crate::test_types::TestExecutor for MCT {
-    fn execute_test(
-        &self,
+    pub fn execute_test(
         crypto: &dyn CryptoOperation,
         tc: &TestCase,
     ) -> TestCaseResult {
@@ -30,7 +26,7 @@ impl crate::test_types::TestExecutor for MCT {
             }
         }
     }
-}
+
 
 
 fn run_hash_mct(

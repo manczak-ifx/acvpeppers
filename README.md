@@ -1,5 +1,7 @@
 # ACVPeppers
-
+Improvements to do : 
+Remote executors, 
+subtopic : embedded devices (Completely separated make a spepare interface with separate main then flash the ountput or smth) , FFI (C Java Python (Abstract the interface)) , support for different algorithms, 
 
 
 ## Getting started

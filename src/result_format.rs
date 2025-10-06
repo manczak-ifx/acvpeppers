@@ -24,9 +24,3 @@ pub struct TestCaseResult {
     pub tc_id: u64,                       
     pub md: String,                      
 }
-pub fn make_upload_body(result_set: &TestResultSet) -> serde_json::Result<Value> {
-    Ok(json!([
-        { "acvVersion": "1.0" },
-        serde_json::to_value(result_set)?
-    ]))
-}

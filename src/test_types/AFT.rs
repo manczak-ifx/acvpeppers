@@ -1,14 +1,12 @@
 
 use crate::cryptography::CryptoOperation;
 use crate::parser::{TestCase};
-use crate::test_types::TestExecutor;
 use crate::result_format::TestCaseResult;
 
-pub struct AFT;
 
-impl TestExecutor for AFT {
-    fn execute_test(
-        &self,
+
+
+   pub fn execute_test(
         crypto: &dyn CryptoOperation,
         test_case: &TestCase,
     ) -> TestCaseResult {
@@ -17,4 +15,4 @@ impl TestExecutor for AFT {
             md: crypto.execute(test_case),
         }
     }
-}
+

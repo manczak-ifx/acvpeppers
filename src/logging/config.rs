@@ -16,11 +16,14 @@ pub struct AppConfig {
     pub log_downloads: bool,
 
 
-    pub base_url : String, 
-    pub client_pkcs12_path: String , 
-    pub client_pkcs12_password : String , 
-    pub totp_file_path: String,
-    pub capability_file : String,
+    pub base_url: String,
+    /// Where credentials come from: "file" (default) or "env".
+    pub credential_source: Option<String>,
+    /// Path to the PKCS#12 client identity for the file provider (not committed).
+    pub client_pkcs12_path: Option<String>,
+    /// Path to the base64 TOTP seed for the file provider (not committed).
+    pub totp_file_path: Option<String>,
+    pub capability_file: String,
 }
 
 impl Default for AppConfig {
@@ -35,11 +38,11 @@ impl Default for AppConfig {
             log_results: true,
             log_uploads: true,
             log_downloads: true,
-            base_url : "https://demo.acvts.nist.gov/acvp/v1/".into(),
-            client_pkcs12_path : "src/acvp_client/certs/client.p12".into(),
-            client_pkcs12_password : "***REMOVED***".into(),
-            totp_file_path : "src/acvp_client/certs/totp.txt".into(),
-            capability_file : "src/capabilities.json".into(),
+            base_url: "https://demo.acvts.nist.gov/acvp/v1/".into(),
+            credential_source: Some("file".into()),
+            client_pkcs12_path: Some("secrets/client.p12".into()),
+            totp_file_path: Some("secrets/totp.txt".into()),
+            capability_file: "src/capabilities.json".into(),
         }
     }
 }

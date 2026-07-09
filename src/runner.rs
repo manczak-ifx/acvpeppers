@@ -38,8 +38,9 @@ pub fn cmd_config(_cli: &Cli, cmd: ConfigCmd, cfg: crate::logging::AppConfig) ->
     if cmd.show || cmd.set_base_url.is_none() {
         println!("Config:");
         println!("  base_url              = {}", cfg.base_url);
-        println!("  client_pkcs12_path    = {}", cfg.client_pkcs12_path);
-        println!("  totp_file_path        = {}", cfg.totp_file_path);
+        println!("  credential_source     = {}", cfg.credential_source.as_deref().unwrap_or("file"));
+        println!("  client_pkcs12_path    = {}", cfg.client_pkcs12_path.as_deref().unwrap_or("<unset>"));
+        println!("  totp_file_path        = {}", cfg.totp_file_path.as_deref().unwrap_or("<unset>"));
         println!("  capability_file       = {}", cfg.capability_file);
         println!("  log_dir               = {}", cfg.log_dir);
         println!("  log_level             = {}", cfg.log_level);
@@ -61,15 +62,13 @@ pub fn cmd_run(cli: &Cli, args: RunArgs, cfg: crate::logging::AppConfig) -> Resu
     let caps_json = load_capabilities(&cap_path)
         .with_context(|| format!("loading capabilities from {}", cap_path))?;
 
-    // Build ACVP client from config
-    let mut acvp = AcvpClient::from_pkcs12(
-        &cfg.base_url,
-        &cfg.client_pkcs12_path,
-        &cfg.client_pkcs12_password,
-        &cfg.totp_file_path,
-    ).context("building ACVP client")?;
+    // Resolve credentials via the configured provider (file or env), then build client.
+    let provider = crate::acvp_client::credentials::provider_from_config(&cfg)
+        .context("resolving ACVP credentials")?;
+    let mut acvp = AcvpClient::from_provider(&cfg.base_url, provider)
+        .context("building ACVP client")?;
 
-    acvp.login_with_totp(&cfg.totp_file_path).context("TOTP login failed")?;
+    acvp.login().context("ACVP login failed")?;
     log::info!("Login successful");
 
     // Create session with normalized capabilities (same as before)

@@ -1,1 +1,20 @@
 /target
+
+# --- Secrets / credentials (never commit these) ---
+/secrets/
+*.p12
+*.pfx
+*.key
+*.pem
+*.cer
+*.crt
+*.csr
+totp.txt
+.env
+.env.*
+
+# --- Generated ACVP artifacts & logs ---
+/logs/
+*.log
+downloaded_vs_*.json
+result_upload_*.json

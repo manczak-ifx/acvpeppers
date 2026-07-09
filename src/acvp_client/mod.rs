@@ -1,2 +1,3 @@
-pub mod client; 
-pub mod hotp;   
+pub mod client;
+pub mod credentials;
+pub mod hotp;

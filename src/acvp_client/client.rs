@@ -1,12 +1,11 @@
-use anyhow::{anyhow, Result};
-use base64::engine::general_purpose::STANDARD;
-use base64::Engine as _;
+use anyhow::{anyhow, Context, Result};
 use reqwest::blocking::{Client, Response};
-use reqwest::{Identity, Method};
+use reqwest::Method;
 use serde_json::{json, Value};
-use std::{fs, thread, time::Duration};
+use std::sync::Arc;
+use std::{thread, time::Duration};
 
-use crate::acvp_client::hotp::totp; 
+use crate::acvp_client::credentials::{CredentialProvider, FileCredentialProvider};
 
 /// Struct for sessio tokenss
 pub struct Session {
@@ -16,22 +15,54 @@ pub struct Session {
 }
 
 pub struct AcvpClient {
-    base_url: String,            
+    base_url: String,
     http: Client,
-    login_jwt: Option<String>,   
+    login_jwt: Option<String>,
+    provider: Arc<dyn CredentialProvider>,
 }
 
 impl AcvpClient {
-    pub fn from_pkcs12(base_url: &str, p12_path: &str, p12_password: &str, _otp_seed_path_hint: &str) -> Result<Self> {
-        let der = fs::read(p12_path)?;
-        let identity = Identity::from_pkcs12_der(&der, p12_password)?;
-        let http = Client::builder().connect_timeout(Duration::from_secs(10)).identity(identity).build()?;
+    /// Build a client whose mTLS identity and TOTP second factor are supplied by
+    /// `provider`.
+    ///
+    /// This is the preferred constructor: it decouples the client from *where*
+    /// credentials live (files, environment variables, a secret manager, an
+    /// HSM, ...). See [`CredentialProvider`].
+    pub fn from_provider(base_url: &str, provider: Arc<dyn CredentialProvider>) -> Result<Self> {
+        let identity = provider
+            .http_identity()
+            .context("loading mTLS client identity from credential provider")?;
+        let http = Client::builder()
+            .connect_timeout(Duration::from_secs(10))
+            .identity(identity)
+            .build()?;
 
         Ok(Self {
             base_url: ensure_trailing_slash(base_url),
             http,
             login_jwt: None,
+            provider,
         })
+    }
+
+    /// Backward-compatible convenience constructor that reads a PKCS#12 identity
+    /// and a TOTP seed file from disk via [`FileCredentialProvider`].
+    ///
+    /// Retained for embedders that only need the default file-based flow;
+    /// [`from_provider`](Self::from_provider) is the general entry point.
+    #[allow(dead_code)]
+    pub fn from_pkcs12(
+        base_url: &str,
+        p12_path: &str,
+        p12_password: &str,
+        totp_seed_path: &str,
+    ) -> Result<Self> {
+        let provider = Arc::new(FileCredentialProvider::new(
+            p12_path,
+            p12_password,
+            totp_seed_path,
+        ));
+        Self::from_provider(base_url, provider)
     }
 
     /// Getter for URL
@@ -39,26 +70,24 @@ impl AcvpClient {
         &self.base_url
     }
 
-    /// Login with TOTP 
-    /// Stores the **login JWT** for subsequent authorized requests
-    pub fn login_with_totp(&mut self, seed_path: &str) -> Result<()> {
-        // 1) Read base64-encoded TOTP seed
-        let seed_b64 = fs::read_to_string(seed_path)?.trim().to_string();
-        let seed = STANDARD
-            .decode(seed_b64)
-            .map_err(|e| anyhow!("failed to decode base64 seed: {e}"))?;
+    /// Authenticate with the ACVP server using the credential provider's current
+    /// TOTP, and store the returned **login JWT** for subsequent authorized
+    /// requests.
+    pub fn login(&mut self) -> Result<()> {
+        // Obtain a fresh one-time password from the credential provider.
+        let password = self
+            .provider
+            .totp_now()
+            .context("generating ACVP TOTP from credential provider")?;
 
-        // 2) Generate TOTP (ACVP: 30s step, 8 digits, SHA-256 in your totp())
-        let password = totp(&seed, 30, 8);
-
-        // 3) ACVP-wrapped login body and POST /login 
+        // ACVP-wrapped login body and POST /login.
         let body = json!([
             { "acvVersion": "1.0" },
             { "password": password }
         ]);
-        let resp = self.request("login", Method::POST, Some(&body), /*with_auth=*/false)?;
+        let resp = self.request("login", Method::POST, Some(&body), /*with_auth=*/ false)?;
 
-        // 4) Extract and store login JWT
+        // Extract and store login JWT.
         let token = resp[1]["accessToken"]
             .as_str()
             .ok_or_else(|| anyhow!("login response missing accessToken"))?;
@@ -221,7 +250,7 @@ impl AcvpClient {
             let jwt = self
                 .login_jwt
                 .as_ref()
-                .ok_or_else(|| anyhow!("missing login JWT; call login_with_totp() first"))?;
+                .ok_or_else(|| anyhow!("missing login JWT; call login() first"))?;
             req = req.bearer_auth(jwt);
         }
 
@@ -297,4 +326,22 @@ fn try_read_body(resp: Response) -> String {
 
 fn ensure_trailing_slash(s: &str) -> String {
     if s.ends_with('/') { s.to_string() } else { format!("{}/", s) }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn from_pkcs12_errors_on_missing_identity_file() {
+        // Exercises the backward-compatible file-based constructor: a missing
+        // identity file must surface as a recoverable error, not a panic.
+        let res = AcvpClient::from_pkcs12(
+            "https://demo.acvts.nist.gov/acvp/v1/",
+            "/nonexistent/acvpeppers/client.p12",
+            "unused",
+            "/nonexistent/acvpeppers/totp.txt",
+        );
+        assert!(res.is_err());
+    }
 }

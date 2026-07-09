@@ -4,6 +4,71 @@ Remote executors,
 subtopic : embedded devices (Completely separated make a spepare interface with separate main then flash the ountput or smth) , FFI (C Java Python (Abstract the interface)) , support for different algorithms, 
 
 
+## Credentials & configuration
+
+ACVPeppers authenticates to the ACVP server with a **client TLS certificate**
+(mutual TLS) and a **TOTP** second factor. **No credentials are bundled with this
+repository** — you supply your own, and they must never be committed.
+
+Credentials are resolved through a pluggable `CredentialProvider`
+(`src/acvp_client/credentials.rs`), selected by the `credential_source` field in
+`acvp.toml`. Two providers ship out of the box.
+
+### Option A — file provider (default)
+
+1. Obtain your ACVP client identity as a PKCS#12 bundle (`client.p12`) and your
+   base64 TOTP seed (`totp.txt`) from NIST.
+2. Put them **outside version control**, e.g. in the git-ignored `secrets/` folder:
+
+   ```
+   secrets/
+     client.p12
+     totp.txt
+   ```
+
+3. Point `acvp.toml` at them (the paths themselves are not secret):
+
+   ```toml
+   credential_source  = "file"
+   client_pkcs12_path = "secrets/client.p12"
+   totp_file_path     = "secrets/totp.txt"
+   ```
+
+4. Provide the PKCS#12 password at runtime — it is **never** stored in the config:
+
+   ```bash
+   export ACVP_CLIENT_PKCS12_PASSWORD='your-password'
+   ```
+
+### Option B — environment provider
+
+Set `credential_source = "env"` in `acvp.toml` and export everything. This keeps all
+secrets in the environment, which is convenient for CI and secret managers.
+
+| Variable | Purpose |
+|----------|---------|
+| `ACVP_CLIENT_PKCS12_PATH` **or** `ACVP_CLIENT_PKCS12_BASE64` | client identity: a file path, or the base64 of the `.p12` |
+| `ACVP_CLIENT_PKCS12_PASSWORD` | PKCS#12 password |
+| `ACVP_TOTP_SEED` **or** `ACVP_TOTP_SEED_PATH` | base64 TOTP seed: the value, or a file path |
+
+```bash
+export ACVP_CLIENT_PKCS12_BASE64="$(base64 -w0 client.p12)"
+export ACVP_CLIENT_PKCS12_PASSWORD='your-password'
+export ACVP_TOTP_SEED="$(cat totp.txt)"
+```
+
+### Adding a new credential source
+
+Implement the `CredentialProvider` trait (an mTLS identity + a TOTP) for your backend
+— e.g. a cloud secret manager or a PKCS#11/HSM device — and wire it into
+`provider_from_config`. The ACVP client depends only on the trait, so no other code
+needs to change.
+
+> **Security:** the certificate and TOTP seed are sensitive. Keep them in `secrets/`
+> (git-ignored) or in your secret manager. If any credential was ever committed to
+> git, treat it as compromised and rotate it with NIST — rewriting history does not
+> un-leak an already-pushed secret.
+
 ## Getting started
 
 To make it easy for you to get started with GitLab, here's a list of recommended next steps.

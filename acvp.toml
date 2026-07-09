@@ -8,7 +8,19 @@ log_results = true
 log_uploads = true 
 log_downloads = true 
 base_url = "https://demo.acvts.nist.gov/acvp/v1/"
-client_pkcs12_path = "src/acvp_client/certs/client.p12"
-client_pkcs12_password = "***REMOVED***"
-totp_file_path = "src/acvp_client/certs/totp.txt"
+# --- Credentials -------------------------------------------------------------
+# How ACVPeppers obtains your ACVP client certificate (mTLS) and TOTP seed:
+#   "file" : read them from the paths below (recommended for local development)
+#   "env"  : read them entirely from environment variables (see README.md)
+credential_source = "file"
+
+# Paths to YOUR credential files. These are NOT committed to git; keep them in a
+# git-ignored location such as ./secrets. See the "Credentials" section of README.md.
+client_pkcs12_path = "secrets/client.p12"
+totp_file_path = "secrets/totp.txt"
+
+# The PKCS#12 password is NEVER stored in this file. Provide it at runtime with:
+#   export ACVP_CLIENT_PKCS12_PASSWORD='your-password'
+# -----------------------------------------------------------------------------
+
 capability_file = "src/capabilities.json"

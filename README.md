@@ -1,5 +1,9 @@
 # ACVPeppers
 
+<p align="center">
+  <img src="assets/logo.png" alt="ACVPeppers logo" width="180">
+</p>
+
 ACVPeppers is a Rust client for running cryptographic tests against the NIST ACVP server.
 
 ## Quick start

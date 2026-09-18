@@ -1,5 +1,4 @@
 /target
-/\.github/
 
 # --- Secrets / credentials (never commit these) ---
 /secrets/

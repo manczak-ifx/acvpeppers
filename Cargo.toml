@@ -3,6 +3,7 @@ name = "acvpeppers"
 version = "0.1.0"
 edition = "2024"
 license = "MIT OR Apache-2.0"
+description = "Rust client for running cryptographic tests against the NIST ACVP server"
 repository = "https://github.com/manczak-ifx/acvpeppers/"
 exclude = ["assets"]
 

@@ -19,3 +19,5 @@ totp.txt
 *.log
 downloaded_vs_*.json
 result_upload_*.json
+
+*.lock

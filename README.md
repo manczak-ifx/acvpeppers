@@ -42,3 +42,12 @@ export ACVP_CLIENT_PKCS12_PASSWORD='your-password'
 ```
 
 Edit `acvp.toml` to use environment-based credentials or a different ACVP endpoint. Never commit credentials.
+
+## License
+
+Licensed under either of:
+
+- [MIT License](LICENSE-MIT)
+- [Apache License, Version 2.0](LICENSE-APACHE)
+
+at your option.

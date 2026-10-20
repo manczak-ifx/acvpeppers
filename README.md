@@ -6,6 +6,9 @@
 
 ACVPeppers is a Rust client for running cryptographic tests against the NIST ACVP server.
 
+## Matrix Channel
+#acvpeppers:matrix.org
+
 ## Quick start
 
 ```bash

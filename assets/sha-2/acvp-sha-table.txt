@@ -1,0 +1,303 @@
+
+8.  Test Vectors
+
+   The ACVP server provides test vectors to the ACVP client, which are
+   then processed and returned to the ACVP server for validation.  A
+   typical ACVP validation test session would require multiple test
+   vector sets to be downloaded and processed by the ACVP client.  Each
+   test vector set represents an individual cryptographic algorithm
+   defined during the capability exchange.  This section describes the
+   JSON schema for a test vector set used with Secure Hash Algorithm
+   (SHA) algorithms.
+
+   The test vector set JSON schema is a multi-level hierarchy that
+   contains meta data for the entire vector set as well as individual
+   test vectors to be processed by the ACVP client.  The following table
+   describes the JSON elements at the top level of the hierarchy.
+
+    +=============+======================================+===========+===========+==========+
+    | JSON Values | Description                          | JSON Type | Cbor Type | Cbor Tag |
+    +=============+======================================+===========+===========+==========+
+    | acvVersion  | Protocol version identifier          | string    | b-string  |          |
+    +-------------+--------------------------------------+-----------+-----------+----------+
+    | vsId        | Unique numeric vector set identifier | integer   | integer   |          |
+    +-------------+--------------------------------------+-----------+-----------+----------+
+    | algorithm   | Algorithm defined in the capability  | string    | b-string  |          |
+    |             | exchange                             |           |           |          |
+    +-------------+--------------------------------------+-----------+-----------+----------+
+    | mode        | Mode defined in the capability       | string    | b-string  |          |
+    |             | exchange                             |           |           |          |
+    +-------------+--------------------------------------+-----------+-----------+----------+
+    | revision    | Protocol test revision selected      | string    | b-string  |          |
+    +-------------+--------------------------------------+-----------+-----------+----------+
+    | testGroups  | Array of test group JSON objects,    | array     | array     |          |
+    |             | which are defined in Section 8.1     |           |           |          |
+    +-------------+--------------------------------------+-----------+-----------+----------+
+
+               Table 3: Top Level Test Vector JSON Elements
+
+   An example of this would look like this
+
+   [
+     {
+       "acvVersion": <version>
+     },
+     {
+       "vsId": 1,
+       "algorithm": "Alg1",
+       "mode": "Mode1",
+       "revision": "Revision1.0",
+       "testGroups": [ ... ]
+     }
+   ]
+
+
+8.1.  Test Groups
+
+   Test vector sets MUST contain one or many test groups, each sharing
+   similar properties.  For instance, all test vectors that use the same
+   testType would be grouped together.  The testGroups element at the
+   top level of the test vector JSON object SHALL be the array of test
+   groups.  The Test Group JSON object MUST contain meta-data that
+   applies to all test cases within the group.  The following table
+   describes the JSON elements that MAY appear from the server in the
+   Test Group JSON object:
+
+    +============+========================================+==========+===========+==========+
+    | JSON Value | Description                            | JSON     | Cbor Type | Cbor Tag |
+    |            |                                        | type     |           |          |
+    +============+========================================+==========+===========+==========+
+    | tgId       | Numeric identifier for the test group, | integer  | integer   |          |
+    |            | unique across the entire vector set    |          |           |          |
+    +------------+----------------------------------------+----------+-----------+----------+
+    | testType   | Test category type (AFT, MCT or LDT).  | string   | b-string  |          |
+    |            | See Section 6 for more information     |          |           |          |
+    +------------+----------------------------------------+----------+-----------+----------+
+    | mctVersion | When testType is MCT, the type of MCT  | string   | b-string  |          |
+    |            | being run, i.e., "standard" or         |          |           |          |
+    |            | "alternate"                            |          |           |          |
+    +------------+----------------------------------------+----------+-----------+----------+
+    | tests      | Array of individual test case JSON     | array of | array of  |          |
+    |            | objects, which are defined in          | testCase | taged     |          |
+    |            | Section 8.2                            | objects  | testCases |          |
+    +------------+----------------------------------------+----------+-----------+----------+
+
+                     Table 4: Test Group JSON Object
+
+   All properties described in the previous table MUST appear in the
+   prompt file from the server for every testGroup object.
+
+
+8.2.  Test Case
+
+   Each test group SHALL contain an array of one or more test cases.
+   Each test case is a JSON object that represents a single case to be
+   processed by the ACVP client.  The following table describes the JSON
+   elements for each test case.
+
+      +==========+============================+=====================+===========+==========+
+      | JSON     | Description                | JSON type           | Cbor Type | Cbor Tag |
+      | Value    |                            |                     |           |          |
+      +==========+============================+=====================+===========+==========+
+      | tcId     | Numeric identifier for the | integer             | integer   | 33001    |
+      |          | test case, unique across   |                     |           |          |
+      |          | the entire vector set      |                     |           |          |
+      +----------+----------------------------+---------------------+-----------+----------+
+      | len      | Length of the message or   | integer             | integer   | 33001    |
+      |          | MCT seed                   |                     |           |          |
+      +----------+----------------------------+---------------------+-----------+----------+
+      | msg      | Value of the message or    | integer             | integer   | 33001    |
+      |          | MCT seed in big-endian hex |                     |           |          |
+      +----------+----------------------------+---------------------+-----------+----------+
+      | largeMsg | Object describing the      | large data object,  | ?         | 33002    |
+      |          | message for an LDT group   | see Section 6.3 for |           |          |
+      |          |                            | more information    |           |          |
+      +----------+----------------------------+---------------------+-----------+----------+
+
+                       Table 5: Test Case JSON Object
+
+   All properties described in the previous table MUST appear in the
+   prompt file from the server for every testCase object.
+
+   The following is an example JSON object for secure hash test vectors
+   sent from the ACVP server to the crypto module.  Note the single bit
+   message is represented as "80".  This complies with SHA1 and SHA2
+   being big-endian by nature.  All hex strings associated with SHA1 and
+   SHA2 SHALL be big-endian.
+
+   [
+       { "acvVersion": <acvp-version> },
+       {
+           "vsId": 1564,
+           "algorithm": "SHA2-512/224",
+           "revision": "1.0",
+           "testGroups": [
+               {
+                   "tgId": 1,
+                   "testType": "AFT",
+                   "tests": [
+                       {
+                           "tcId": 0,
+                           "len": 0,
+                           "msg": "00"
+                       },
+                       {
+                           "tcId": 1,
+                           "len": 1,
+                           "msg": "80"
+                       }
+                   ]
+               },
+               {
+                   "tgId": 2,
+                   "testType": "MCT",
+                   "mctVersion": "standard",
+                   "tests": [
+                       {
+                           "tcId": 2175,
+                           "len": 20,
+                           "msg": "331b04d56f6e3ed5af349bf1fd9f9591b6ec886e",
+                       }
+                   ]
+               },
+               {
+                   "tgId": 3,
+                   "testType": "LDT",
+                   "tests": [
+                       {
+                           "tcId": 1029,
+                           "largeMsg": {
+                               "content": "DE26",
+                               "contentLength": 16,
+                               "fullLength": 42949672960,
+                               "expansionTechnique": "repeating"
+                           }
+                       }
+                   ]
+               }
+           ]
+       }
+   ]
+
+
+8.3.  Test Vector Responses
+
+   After the ACVP client downloads and processes a vector set, it SHALL
+   send the response vectors back to the ACVP server within the alloted
+   timeframe.  The following table describes the JSON object that
+   represents a vector set response.
+
+       +============+==================================+===========+
+       | JSON Value | Description                      | JSON type |
+       +============+==================================+===========+
+       | acvVersion | Protocol version identifier      | string    |
+       +------------+----------------------------------+-----------+
+       | vsId       | Unique numeric identifier for    | integer   |
+       |            | the vector set                   |           |
+       +------------+----------------------------------+-----------+
+       | testGroups | Array of JSON objects that       | array of  |
+       |            | represent each test vector       | testGroup |
+       |            | result, which uses the same JSON | objects   |
+       |            | schema as defined in Section 8.2 |           |
+       +------------+----------------------------------+-----------+
+
+                  Table 6: Vector Set Response JSON Object
+
+   The testGroup Response section is used to organize the ACVP client
+   response in a similar manner to how it receives vectors.  Several
+   algorithms SHALL require the client to send back group level
+   properties in its response.  This structure helps accommodate that.
+
+      +============+=============================+==================+
+      | JSON Value | Description                 | JSON type        |
+      +============+=============================+==================+
+      | tgId       | The test group identifier   | integer          |
+      +------------+-----------------------------+------------------+
+      | tests      | The tests associated to the | array of         |
+      |            | group specified in tgId     | testCase objects |
+      +------------+-----------------------------+------------------+
+
+               Table 7: Vector Set Group Response JSON Object
+
+   Each test case is a JSON object that represents a single test object
+   to be processed by the ACVP client.
+
+   The following table describes the JSON elements for each test case
+   object.
+
+    +==============+=====================================+============+
+    | JSON Value   | Description                         | JSON type  |
+    +==============+=====================================+============+
+    | tcId         | Numeric identifier for the test     | integer    |
+    |              | case, unique across the entire      |            |
+    |              | vector set.                         |            |
+    +--------------+-------------------------------------+------------+
+    | md           | The IUT's message digest response   | string     |
+    |              | to an AFT or LDT test               | (hex)      |
+    +--------------+-------------------------------------+------------+
+    | resultsArray | Array of JSON objects that          | array of   |
+    |              | represent each iteration of an MCT. | objects    |
+    |              | Each iteration will output the md   | containing |
+    |              |                                     | the md     |
+    +--------------+-------------------------------------+------------+
+
+                   Table 8: Test Case Results JSON Object
+
+   Note: The tcId MUST be included in every test case object sent
+   between the client and the server.
+
+   The following is a example JSON object for secure hash test results
+   sent from the crypto module to the ACVP server.  The group identified
+   by tgId 1 is a group of AFTs.  The group identified by tgId 2 is a
+   group of MCTs.  The group identified by tgId 3 is a group of LDTs.
+
+   {
+       "vsId": 0,
+       "algorithm": "SHA2-224",
+       "revision": "1.0",
+       "testGroups": [
+           {
+               "tgId": 1,
+               "tests": [
+                   {
+                       "tcId": 1,
+                       "md": "D14A028C2A3A2BC9476102BB288234C415A2B01F828EA62AC5B3E42F"
+                   },
+                   {
+                       "tcId": 2,
+                       "md": "D14A028C2A3A2BC9476102BB288234C415A2B01F828EA62AC5B3E42F"
+                   }
+               ]
+           },
+           {
+               "tgId": 2,
+               "tests": [
+                   {
+                       "tcId": 1028,
+                       "resultsArray": [
+                           {
+                               "md": "E82B1FA3D510C2E423D03CEDF01F66C995CDD573EB63D5A33FDAE640"
+                           },
+                           {
+                               "md": "00179AE4CE57DCBD156B981A414370B5089FA8E1098A05443DF3CD62"
+                           },
+                           {
+                               "md": "8F6C7F546940352613E8389D4F4B87473A57CACD7E289A27E4F51965"
+                           }
+                       ]
+                   }
+               ]
+           },
+           {
+               "tgId": 3,
+               "tests": [
+                   {
+                       "tcId": 1029,
+                       "md": "E4F8B44B32F5A25D1F4784601BF095CF5F7C6F4E9EAA1005AD19F09A"
+                   }
+               ]
+           }
+       ]
+   }
+
+

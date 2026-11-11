@@ -1,0 +1,1218 @@
+7.  Capabilities Registration
+
+   ACVP requires crypto modules to register their capabilities.  This
+   allows the crypto module to advertise support for specific
+   algorithms, notifying the ACVP server which algorithms need test
+   vectors generated for the validation process.  This section describes
+   the constructs for advertising support of Block Cipher algorithms to
+   the ACVP server.
+
+   The algorithm capabilities MUST be advertised as JSON objects within
+   the 'algorithms' value of the ACVP registration message.  The
+   'algorithms' value is an array, where each array element is an
+   individual JSON object defined in this section.  The 'algorithms'
+   value is part of the 'capability_exchange' element of the ACVP JSON
+   registration message.  See the ACVP specification [ACVP] for more
+   details on the registration message.
+
+7.1.  Prerequisites
+
+   Each algorithm implementation MAY rely on other cryptographic
+   primitives.  For example, RSA Signature algorithms depend on an
+   underlying hash function.  Each of these underlying algorithm
+   primitives must be validated, either separately or as part of the
+   same submission.  ACVP provides a mechanism for specifying the
+   required prerequisites:
+
+   Prerequisites, if applicable, MUST be submitted in the registration
+   as the prereqVals JSON property array inside each element of the
+   algorithms array.  Each element in the prereqVals array MUST contain
+   the following properties
+
+        +===============+=============================+===========+
+        | JSON Property | Description                 | JSON Type |
+        +===============+=============================+===========+
+        | algorithm     | a prerequisite algorithm    | string    |
+        +---------------+-----------------------------+-----------+
+        | valValue      | algorithm validation number | string    |
+        +---------------+-----------------------------+-----------+
+
+                      Table 1: Prerequisite Properties
+
+   A "valValue" of "same" SHALL be used to indicate that the
+   prerequisite is being met by a different algorithm in the capability
+   exchange in the same registration.
+
+   An example description of prerequisites within a single algorithm
+   capability exchange looks like this
+
+   "prereqVals":
+   [
+     {
+       "algorithm": "Alg1",
+       "valValue": "Val-1234"
+     },
+     {
+       "algorithm": "Alg2",
+       "valValue": "same"
+     }
+   ]
+
+7.2.  Required Prerequisite Algorithms for Block Cipher Validations
+
+   Some block cipher algorithm implementations rely on other
+   cryptographic primitives.  For example, AES-CCM uses an underlying
+   AES-ECB algorithm.  Each of these underlying algorithm primitives
+   MUST be validated, either separately or as part of the same
+   submission.  ACVP provides a mechanism for specifying the required
+   prerequisites:
+
+   +==============+===================+========+=======================+
+   | JSON Value   | Description       | JSON   | Example Values        |
+   |              |                   | type   |                       |
+   +==============+===================+========+=======================+
+   | algorithm    | a prerequisite    | string | AES, DRBG, TDES       |
+   |              | algorithm         |        |                       |
+   +--------------+-------------------+--------+-----------------------+
+   | valValue     | algorithm         | string | actual number or      |
+   |              | validation        |        | "same" to refer to    |
+   |              | number            |        | the same submission   |
+   +--------------+-------------------+--------+-----------------------+
+   | prereqAlgVal | prerequisite      | object | exactly one algorithm |
+   |              | algorithm         |        | property and one      |
+   |              | validation        |        | valValue property     |
+   +--------------+-------------------+--------+-----------------------+
+
+           Table 2: Required Prerequisite Algorithms JSON Values
+
+7.3.  Block Cipher Algorithm Capabilities JSON Values
+
+   Each algorithm capability advertised is a self-contained JSON object
+   and SHALL use the following values when appropriate:
+
+   +==========================+===========================+============+
+   |JSON Value                |Description                |JSON type   |
+   +==========================+===========================+============+
+   |algorithm                 |The block cipher algorithm |string      |
+   |                          |and mode to be validated.  |            |
+   +--------------------------+---------------------------+------------+
+   |revision                  |The version of the testing |string      |
+   |                          |methodology the IUT is     |            |
+   |                          |requesting to validate     |            |
+   |                          |against.                   |            |
+   +--------------------------+---------------------------+------------+
+   |conformances              |The additional conformance |array of    |
+   |                          |for the algorithm for a    |string      |
+   |                          |specific use-case          |            |
+   +--------------------------+---------------------------+------------+
+   |prereqVals                |Prerequisite algorithm     |array of    |
+   |                          |validations                |prereqAlgVal|
+   |                          |                           |objects     |
+   |                          |                           |described in|
+   |                          |                           |Table 2     |
+   +--------------------------+---------------------------+------------+
+   |direction                 |The IUT processing         |array of    |
+   |                          |direction                  |strings     |
+   +--------------------------+---------------------------+------------+
+   |keyLen                    |The supported key lengths  |array of    |
+   |                          |in bits                    |integers    |
+   +--------------------------+---------------------------+------------+
+   |payloadLen                |The supported plain and    |domain      |
+   |                          |cipher text lengths in     |            |
+   |                          |bits.  This varies         |            |
+   |                          |depending on the algorithm |            |
+   |                          |type; for additional       |            |
+   |                          |details see Table 5,       |            |
+   |                          |Table 7, Table 8 and       |            |
+   |                          |Table 9.  For AES-CTR, the |            |
+   |                          |values supplied for this   |            |
+   |                          |parameter refer to the bit |            |
+   |                          |sizes supported in the last|            |
+   |                          |incomplete block (less than|            |
+   |                          |128 bits) of the plain or  |            |
+   |                          |cipher text.               |            |
+   +--------------------------+---------------------------+------------+
+   |ivLen                     |The supported IV/Nonce     |domain      |
+   |                          |lengths in bits, see       |            |
+   |                          |Table 7                    |            |
+   +--------------------------+---------------------------+------------+
+   |ivGen                     |IV generation method for   |string      |
+   |                          |AES-GCM/AES-XPN algorithms |            |
+   +--------------------------+---------------------------+------------+
+   |ivGenMode                 |IV generation mode for AES-|string      |
+   |                          |GCM/AES-XPN algorithms     |            |
+   +--------------------------+---------------------------+------------+
+   |saltGen                   |Salt generation method for |string      |
+   |                          |AES-XPN mode only          |            |
+   +--------------------------+---------------------------+------------+
+   |aadLen                    |The supported AAD lengths  |domain      |
+   |                          |in bits for AEAD algorithms|            |
+   +--------------------------+---------------------------+------------+
+   |tagLen                    |The supported Tag lengths  |array of    |
+   |                          |in bits for AEAD           |integers    |
+   |                          |algorithms, see Table 7    |            |
+   +--------------------------+---------------------------+------------+
+   |kwCipher                  |The cipher as defined in   |array of    |
+   |                          |SP800-38F for key wrap mode|strings     |
+   +--------------------------+---------------------------+------------+
+   |tweakMode                 |Indicates the format(s) of |array of    |
+   |                          |the tweak value input for  |strings     |
+   |                          |AES-XTS.  A value of "hex" |            |
+   |                          |indicates that the IUT     |            |
+   |                          |expects the tweak value    |            |
+   |                          |input as a hexadecimal     |            |
+   |                          |string.  A value of        |            |
+   |                          |"number" indicates that the|            |
+   |                          |IUT expects to receive a   |            |
+   |                          |Data Unit Sequence Number. |            |
+   +--------------------------+---------------------------+------------+
+   |keyingOption              |The Keying Option used in  |array of    |
+   |                          |TDES.  Keying option 1 (1) |integers    |
+   |                          |is 3 distinct keys (K1, K2,|            |
+   |                          |K3).  Keying Option 2 (2)  |            |
+   |                          |is 2 distinct keys only    |            |
+   |                          |suitable for decrypt (K1,  |            |
+   |                          |K2, K1).                   |            |
+   +--------------------------+---------------------------+------------+
+   |overflowCounter           |Indicates if the           |boolean     |
+   |                          |implementation can handle a|            |
+   |                          |counter exceeding the      |            |
+   |                          |maximum value              |            |
+   +--------------------------+---------------------------+------------+
+   |incrementalCounter        |Indicates if the           |boolean     |
+   |                          |implementation increments  |            |
+   |                          |the counter (versus        |            |
+   |                          |decrementing the counter)  |            |
+   +--------------------------+---------------------------+------------+
+   |performCounterTests       |Indicates if the           |boolean     |
+   |                          |implementation can perform |            |
+   |                          |the Counter tests which    |            |
+   |                          |check for an always        |            |
+   |                          |increasing (or decreasing) |            |
+   |                          |counter value              |            |
+   +--------------------------+---------------------------+------------+
+   |tweakLen                  |The domain of values       |domain      |
+   |                          |allowed for ACVP-AES-FF1's |            |
+   |                          |tweak value.  Allowed range|            |
+   |                          |is 0-128 bits mod 8.  See  |            |
+   |                          |Table 9                    |            |
+   +--------------------------+---------------------------+------------+
+   |capabilities              |An array of objects that   |Array of    |
+   |                          |describes an IUT's         |Objects     |
+   |                          |capabilities as they       |            |
+   |                          |pertain to ACVP-AES-FF1 and|            |
+   |                          |ACVP-AES-FF3-1.  See       |            |
+   |                          |Table 9 and Section 7.3,   |            |
+   |                          |Paragraph 25               |            |
+   +--------------------------+---------------------------+------------+
+   |dataUnitLen               |The length(s) of the ACVP- |domain      |
+   |                          |AES-XTS data unit supported|            |
+   |                          |by the IUT.  It is assumed |            |
+   |                          |that all lengths listed by |            |
+   |                          |the dataUnitLen property   |            |
+   |                          |are also valid payload     |            |
+   |                          |lengths.  As such, the     |            |
+   |                          |values for the payloadLen  |            |
+   |                          |property MUST include all  |            |
+   |                          |dataUnitLen values.  If the|            |
+   |                          |value of the               |            |
+   |                          |dataUnitLenMatchesPayload  |            |
+   |                          |property is false, the     |            |
+   |                          |dataUnitLen property SHALL |            |
+   |                          |be present; if the value of|            |
+   |                          |the                        |            |
+   |                          |dataUnitLenMatchesPayload  |            |
+   |                          |property is true, the      |            |
+   |                          |dataUnitLen parameter SHALL|            |
+   |                          |not be present.            |            |
+   +--------------------------+---------------------------+------------+
+   |dataUnitLenMatchesPayload |Whether or not the length  |boolean     |
+   |                          |of the data unit always    |            |
+   |                          |matches the length of the  |            |
+   |                          |payload in ACVP-AES-XTS    |            |
+   +--------------------------+---------------------------+------------+
+
+          Table 3: Block Cipher Algorithm Capabilities JSON Values
+
+      |  NOTE 1: The 'conformances' property is only valid for
+      |  algorithms listed in Section 5.1.  The valid values in the
+      |  array are also listed in that section.  The array is always
+      |  optional.
+
+      |  NOTE 2: Some optional values are required depending on the
+      |  algorithm.  For example, AES-GCM requires ivLen, ivGen, aadLen,
+      |  and tagLen.  Failure to provide these values will result in the
+      |  ACVP server returning an error to the ACVP client during
+      |  registration.
+
+      |  NOTE 3: The 'performCounterTests' option is provided for
+      |  counter implementations such as linear-feedback shift registers
+      |  which may not present an always increasing or decreasing
+      |  counter while still ensuring the IV is unique.  This value
+      |  defaults to true if not present.  If it is set to false, the
+      |  'overflowCounter' and 'incrementalCounter' values will not be
+      |  used.
+
+   The following grid outlines which properties are REQUIRED, as well as
+   all the possible values a server MAY support for each standard block
+   cipher algorithm:
+
+   +=============+==========+=============+========+===================+
+   | algorithm   | revision | direction   | keyLen | keyingOption      |
+   +=============+==========+=============+========+===================+
+   | AES-ECB     | "1.0"    | ["encrypt", | [128,  |                   |
+   |             |          | "decrypt"]  | 192,   |                   |
+   |             |          |             | 256]   |                   |
+   +-------------+----------+-------------+--------+-------------------+
+   | AES-CBC     | "1.0"    | ["encrypt", | [128,  |                   |
+   |             |          | "decrypt"]  | 192,   |                   |
+   |             |          |             | 256]   |                   |
+   +-------------+----------+-------------+--------+-------------------+
+   | AES-OFB     | "1.0"    | ["encrypt", | [128,  |                   |
+   |             |          | "decrypt"]  | 192,   |                   |
+   |             |          |             | 256]   |                   |
+   +-------------+----------+-------------+--------+-------------------+
+   | AES-CFB1    | "1.0"    | ["encrypt", | [128,  |                   |
+   |             |          | "decrypt"]  | 192,   |                   |
+   |             |          |             | 256]   |                   |
+   +-------------+----------+-------------+--------+-------------------+
+   | AES-CFB8    | "1.0"    | ["encrypt", | [128,  |                   |
+   |             |          | "decrypt"]  | 192,   |                   |
+   |             |          |             | 256]   |                   |
+   +-------------+----------+-------------+--------+-------------------+
+   | AES-CFB128  | "1.0"    | ["encrypt", | [128,  |                   |
+   |             |          | "decrypt"]  | 192,   |                   |
+   |             |          |             | 256]   |                   |
+   +-------------+----------+-------------+--------+-------------------+
+   | TDES-ECB    | "1.0"    | ["encrypt", |        | [1, 2] Note:      |
+   |             |          | "decrypt"]  |        | 2 is only         |
+   |             |          |             |        | available         |
+   |             |          |             |        | for decrypt       |
+   |             |          |             |        | operations        |
+   +-------------+----------+-------------+--------+-------------------+
+   | TDES-CBC    | "1.0"    | ["encrypt", |        | [1, 2] Note:      |
+   |             |          | "decrypt"]  |        | 2 is only         |
+   |             |          |             |        | available         |
+   |             |          |             |        | for decrypt       |
+   |             |          |             |        | operations        |
+   +-------------+----------+-------------+--------+-------------------+
+   | TDES-CBCI   | "1.0"    | ["encrypt", |        | [1, 2] Note:      |
+   |             |          | "decrypt"]  |        | 2 is only         |
+   |             |          |             |        | available         |
+   |             |          |             |        | for decrypt       |
+   |             |          |             |        | operations        |
+   +-------------+----------+-------------+--------+-------------------+
+   | TDES-CFB1   | "1.0"    | ["encrypt", |        | [1, 2] Note:      |
+   |             |          | "decrypt"]  |        | 2 is only         |
+   |             |          |             |        | available         |
+   |             |          |             |        | for decrypt       |
+   |             |          |             |        | operations        |
+   +-------------+----------+-------------+--------+-------------------+
+   | TDES-CFB8   | "1.0"    | ["encrypt", |        | [1, 2] Note:      |
+   |             |          | "decrypt"]  |        | 2 is only         |
+   |             |          |             |        | available         |
+   |             |          |             |        | for decrypt       |
+   |             |          |             |        | operations        |
+   +-------------+----------+-------------+--------+-------------------+
+   | TDES-CFB64  | "1.0"    | ["encrypt", |        | [1, 2] Note:      |
+   |             |          | "decrypt"]  |        | 2 is only         |
+   |             |          |             |        | available         |
+   |             |          |             |        | for decrypt       |
+   |             |          |             |        | operations        |
+   +-------------+----------+-------------+--------+-------------------+
+   | TDES-CFBP1  | "1.0"    | ["encrypt", |        | [1, 2] Note:      |
+   |             |          | "decrypt"]  |        | 2 is only         |
+   |             |          |             |        | available         |
+   |             |          |             |        | for decrypt       |
+   |             |          |             |        | operations        |
+   +-------------+----------+-------------+--------+-------------------+
+   | TDES-CFBP8  | "1.0"    | ["encrypt", |        | [1, 2] Note:      |
+   |             |          | "decrypt"]  |        | 2 is only         |
+   |             |          |             |        | available         |
+   |             |          |             |        | for decrypt       |
+   |             |          |             |        | operations        |
+   +-------------+----------+-------------+--------+-------------------+
+   | TDES-CFBP64 | "1.0"    | ["encrypt", |        | [1, 2] Note:      |
+   |             |          | "decrypt"]  |        | 2 is only         |
+   |             |          |             |        | available         |
+   |             |          |             |        | for decrypt       |
+   |             |          |             |        | operations        |
+   +-------------+----------+-------------+--------+-------------------+
+   | TDES-OFB    | "1.0"    | ["encrypt", |        | [1, 2] Note:      |
+   |             |          | "decrypt"]  |        | 2 is only         |
+   |             |          |             |        | available         |
+   |             |          |             |        | for decrypt       |
+   |             |          |             |        | operations        |
+   +-------------+----------+-------------+--------+-------------------+
+   | TDES-OFBI   | "1.0"    | ["encrypt", |        | [1, 2] Note:      |
+   |             |          | "decrypt"]  |        | 2 is only         |
+   |             |          |             |        | available         |
+   |             |          |             |        | for decrypt       |
+   |             |          |             |        | operations        |
+   +-------------+----------+-------------+--------+-------------------+
+
+           Table 4: Standard Block Cipher Algorithm Capabilities
+                             Applicability Grid
+
+      |  NOTE: keyingOption 2 SHALL only be available for decrypt
+      |  operations.
+
+   The following grid outlines which properties are REQUIRED, as well as
+   the possible values a server MAY support for each key-wrap block
+   cipher algorithm:
+
+   +=========+========+===========+======+==========+============+============+
+   |algorithm|revision|direction  |keyLen|kwCipher  |keyingOption|payloadLen  |
+   +=========+========+===========+======+==========+============+============+
+   |AES-KW   |"1.0"   |["encrypt",|[128, |["cipher",|            |{"Min": 128,|
+   |         |        |"decrypt"] |192,  |"inverse"]|            |"Max": 4096,|
+   |         |        |           |256]  |          |            |"Increment":|
+   |         |        |           |      |          |            |64}         |
+   +---------+--------+-----------+------+----------+------------+------------+
+   |AES-KWP  |"1.0"   |["encrypt",|[128, |["cipher",|            |{"Min": 8,  |
+   |         |        |"decrypt"] |192,  |"inverse"]|            |"Max": 4096,|
+   |         |        |           |256]  |          |            |"Increment":|
+   |         |        |           |      |          |            |8}          |
+   +---------+--------+-----------+------+----------+------------+------------+
+   |TDES-KW  |"1.0"   |["encrypt",|      |["cipher",|[1, 2] Note:|{"Min": 64, |
+   |         |        |"decrypt"] |      |"inverse"]|2 is only   |"Max": 4096,|
+   |         |        |           |      |          |available   |"Increment":|
+   |         |        |           |      |          |for decrypt |32}         |
+   |         |        |           |      |          |operations  |            |
+   +---------+--------+-----------+------+----------+------------+------------+
+
+           Table 5: Key-Wrap Block Cipher Algorithm Capabilities
+                             Applicability Grid
+
+   The underlying operations associated with different KW and KWP
+   parameter selections are summarized in the following grid.
+
+    +============================+=========+==========================+
+    | Operation                  | Cipher  | Underlying AES Operation |
+    +============================+=========+==========================+
+    | Wrap (direction encrypt)   | Cipher  | AES Encrypt              |
+    +----------------------------+---------+--------------------------+
+    | Wrap (direction encrypt)   | Inverse | AES Decrypt              |
+    +----------------------------+---------+--------------------------+
+    | Unwrap (direction decrypt) | Cipher  | AES Decrypt              |
+    +----------------------------+---------+--------------------------+
+    | Unwrap (direction decrypt) | Inverse | AES Encrypt              |
+    +----------------------------+---------+--------------------------+
+
+                Table 6: Wrapping and Unwrapping Operations
+
+   The following grid outlines which properties are REQUIRED, as well as
+   the possible values a server MAY support for each authenticated block
+   cipher algorithm:
+
+   +=========+========+===========+======+==========+=======+============+=========+============+=======+======+
+   |algorithm|revision|direction  |keyLen|payloadLen|ivLen  |ivGen       |ivGenMode|saltGen     |aadLen |tagLen|
+   +=========+========+===========+======+==========+=======+============+=========+============+=======+======+
+   |AES-GCM  |"1.0"   |["encrypt",|[128, |{"Min": 0,|{"Min":|["internal",|["8.2.1",|            |{"Min":|[32,  |
+   |         |        |"decrypt"] |192,  |"Max":    |8,     |"external"] |"8.2.2"] |            |0,     |64,   |
+   |         |        |           |256]  |65536,    |"Max": |            |         |            |"Max": |96,   |
+   |         |        |           |      |"Inc":    |1024,  |            |         |            |65536, |104,  |
+   |         |        |           |      |any}      |"Inc": |            |         |            |"Inc": |112,  |
+   |         |        |           |      |          |any}   |            |         |            |any}   |120,  |
+   |         |        |           |      |          |       |            |         |            |       |128]  |
+   +---------+--------+-----------+------+----------+-------+------------+---------+------------+-------+------+
+   |AES-GCM- |"1.0"   |["encrypt",|[128, |{"Min": 0,|       |            |         |            |{"Min":|      |
+   |SIV      |        |"decrypt"] |256]  |"Max":    |       |            |         |            |0,     |      |
+   |         |        |           |      |65536,    |       |            |         |            |"Max": |      |
+   |         |        |           |      |"Inc": 8} |       |            |         |            |65536, |      |
+   |         |        |           |      |          |       |            |         |            |"Inc": |      |
+   |         |        |           |      |          |       |            |         |            |8}     |      |
+   +---------+--------+-----------+------+----------+-------+------------+---------+------------+-------+------+
+   |AES-XPN  |"1.0"   |["encrypt",|[128, |{"Min": 0,|       |["internal",|["8.2.1",|["internal",|{"Min":|[32,  |
+   |         |        |"decrypt"] |192,  |"Max":    |       |"external"] |"8.2.2"] |"external"] |1,     |64,   |
+   |         |        |           |256]  |65536,    |       |            |         |            |"Max": |96,   |
+   |         |        |           |      |"Inc":    |       |            |         |            |65536, |104,  |
+   |         |        |           |      |any}      |       |            |         |            |"Inc": |112,  |
+   |         |        |           |      |          |       |            |         |            |any}   |120,  |
+   |         |        |           |      |          |       |            |         |            |       |128]  |
+   +---------+--------+-----------+------+----------+-------+------------+---------+------------+-------+------+
+   |AES-CCM  |"1.0"   |           |[128, |{"Min": 0,|{"Min":|            |         |            |{"Min":|[32,  |
+   |         |        |           |192,  |"Max":    |56,    |            |         |            |0,     |48,   |
+   |         |        |           |256]  |256,      |"Max": |            |         |            |"Max": |64,   |
+   |         |        |           |      |"Inc": 8} |104,   |            |         |            |524288,|80,   |
+   |         |        |           |      |          |"Inc": |            |         |            |"Inc": |96,   |
+   |         |        |           |      |          |8}     |            |         |            |any}   |112,  |
+   |         |        |           |      |          |       |            |         |            |       |128]  |
+   +---------+--------+-----------+------+----------+-------+------------+---------+------------+-------+------+
+
+         Table 7: Authenticated Block Cipher Algorithm Capabilities
+                             Applicability Grid
+
+      |  NOTE 1: The ivGenMode property is used for AES-GCM/AES-XPN
+      |  algorithms to document which IV construction method the
+      |  implementation conforms to: the deterministic construction
+      |  defined in SP 800-38D section 8.2.1 or the RBG-based
+      |  construction defined in SP 800-38D section 8.2.2.
+
+      |  NOTE 2: For AES-CCM-ECMA, the IV/NONCE is used to create a pre-
+      |  formatted "B_0 block" containing 16-bytes as defined by Fig 113
+      |  in ECMA-368 Sec 18.5.
+
+      |  NOTE 3: The ivLen for AES-CCM-ECMA SHALL be 104-bits.
+
+   The following grid outlines which properties are REQUIRED, as well as
+   the possible values a server MAY support for the XTS block cipher
+   algorithm:
+
+   +---------+--------+-----------+------+----------+---------+-----------+-------------------------+
+   |algorithm|revision|direction  |keyLen|payloadLen|tweakMode|dataUnitLen|dataUnitLenMatchesPayload|
+   +---------+--------+-----------+------+----------+---------+-----------+-------------------------+
+   |ACVP-AES-|"1.0"   |["encrypt",|[128, |{"Min":   |["hex",  |           |                         |
+   |XTS      |        |"decrypt"] |256]  |128,      |"number"]|           |                         |
+   |         |        |           |      |"Max":    |         |           |                         |
+   |         |        |           |      |65536,    |         |           |                         |
+   |         |        |           |      |"Inc":    |         |           |                         |
+   |         |        |           |      |128}      |         |           |                         |
+   +---------+--------+-----------+------+----------+---------+-----------+-------------------------+
+   |ACVP-AES-|"2.0"   |["encrypt",|[128, |{"Min":   |["hex",  |{"Min":    |true, false (if this     |
+   |XTS      |        |"decrypt"] |256]  |128,      |"number"]|128, "Max":|value is true, the       |
+   |         |        |           |      |"Max":    |         |65536,     |dataUnitLen parameter    |
+   |         |        |           |      |65536,    |         |"Inc": 8}  |SHALL not be present; if |
+   |         |        |           |      |"Inc": 8} |         |           |this value is false, the |
+   |         |        |           |      |          |         |           |dataUnitLen parameter    |
+   |         |        |           |      |          |         |           |SHALL be present)        |
+   +---------+--------+-----------+------+----------+---------+-----------+-------------------------+
+
+    Table 8: XTS Block Cipher Algorithm Capabilities Applicability Grid
+
+      |  NOTE: The difference in testing between ACVP-AES-XTS / "1.0"
+      |  and ACVP-AES-XTS / "2.0" is the inclusion of the data unit in
+      |  the "2.0" revision.  The [AES-XTS] standard provides the
+      |  concept of a data unit as a means of logically breaking apart a
+      |  data stream provided to the encryption algorithm.  A data unit
+      |  may be larger, smaller or equal to the payload being processed.
+      |  In the case of the "1.0" revision, the data unit length always
+      |  matches the payload length.  Thus, the equivalent of the "1.0"
+      |  revision can be accessed via the "2.0" revision by setting the
+      |  'dataUnitLenMatchesPayload' field to true.  Within the prompt,
+      |  in "1.0", the test group contains the payload length for the
+      |  entire group.  In "2.0" this is moved to the test case level
+      |  and handled on a per case basis along with the data unit
+      |  length.  Both values may be provided in the test case JSON even
+      |  when 'dataUnitLenMatchesPayload' is true.
+
+   The following grid outlines which properties are REQUIRED, as well as
+   the possible values a server MAY support for each miscellaneous block
+   cipher algorithm:
+
+   +=========+========+===========+======+==========+============+===============+==================+===================+========+============+
+   |algorithm|revision|direction  |keyLen|payloadLen|keyingOption|overflowCounter|incrementalCounter|performCounterTests|tweakLen|capabilities|
+   +=========+========+===========+======+==========+============+===============+==================+===================+========+============+
+   |AES-CBC- |"1.0"   |["encrypt",|[128, |{"Min":   |            |               |                  |                   |        |            |
+   |CS1      |        |"decrypt"] |192,  |128,      |            |               |                  |                   |        |            |
+   |         |        |           |256]  |"Max":    |            |               |                  |                   |        |            |
+   |         |        |           |      |65536,    |            |               |                  |                   |        |            |
+   |         |        |           |      |"Inc":    |            |               |                  |                   |        |            |
+   |         |        |           |      |any}      |            |               |                  |                   |        |            |
+   +---------+--------+-----------+------+----------+------------+---------------+------------------+-------------------+--------+------------+
+   |AES-CBC- |"1.0"   |["encrypt",|[128, |{"Min":   |            |               |                  |                   |        |            |
+   |CS2      |        |"decrypt"] |192,  |128,      |            |               |                  |                   |        |            |
+   |         |        |           |256]  |"Max":    |            |               |                  |                   |        |            |
+   |         |        |           |      |65536,    |            |               |                  |                   |        |            |
+   |         |        |           |      |"Inc":    |            |               |                  |                   |        |            |
+   |         |        |           |      |any}      |            |               |                  |                   |        |            |
+   +---------+--------+-----------+------+----------+------------+---------------+------------------+-------------------+--------+------------+
+   |AES-CBC- |"1.0"   |["encrypt",|[128, |{"Min":   |            |               |                  |                   |        |            |
+   |CS3      |        |"decrypt"] |192,  |128,      |            |               |                  |                   |        |            |
+   |         |        |           |256]  |"Max":    |            |               |                  |                   |        |            |
+   |         |        |           |      |65536,    |            |               |                  |                   |        |            |
+   |         |        |           |      |"Inc":    |            |               |                  |                   |        |            |
+   |         |        |           |      |any}      |            |               |                  |                   |        |            |
+   +---------+--------+-----------+------+----------+------------+---------------+------------------+-------------------+--------+------------+
+   |AES-CTR  |"1.0"   |["encrypt",|[128, |{"Min": 1,|            |true, false    |true, false       |true, false        |        |            |
+   |         |        |"decrypt"] |192,  |"Max":    |            |               |                  |                   |        |            |
+   |         |        |           |256]  |128,      |            |               |                  |                   |        |            |
+   |         |        |           |      |"Inc":    |            |               |                  |                   |        |            |
+   |         |        |           |      |any}      |            |               |                  |                   |        |            |
+   +---------+--------+-----------+------+----------+------------+---------------+------------------+-------------------+--------+------------+
+   |TDES-CTR |"1.0"   |["encrypt",|      |{"Min": 1,|[1, 2] Note:|true, false    |true, false       |true, false        |        |            |
+   |         |        |"decrypt"] |      |"Max": 64,|2 is only   |               |                  |                   |        |            |
+   |         |        |           |      |"Inc":    |available   |               |                  |                   |        |            |
+   |         |        |           |      |any}      |for decrypt |               |                  |                   |        |            |
+   |         |        |           |      |          |operations  |               |                  |                   |        |            |
+   +---------+--------+-----------+------+----------+------------+---------------+------------------+-------------------+--------+------------+
+   |AES-FF1  |"1.0"   |["encrypt",|[128, |          |            |               |                  |                   |Domain  |At least one|
+   |         |        |"decrypt"] |192,  |          |            |               |                  |                   |0-128   |set of      |
+   |         |        |           |256]  |          |            |               |                  |                   |bits,   |capabilities|
+   |         |        |           |      |          |            |               |                  |                   |mod 8.  |is required.|
+   |         |        |           |      |          |            |               |                  |                   |        |See         |
+   |         |        |           |      |          |            |               |                  |                   |        |Section 7.3,|
+   |         |        |           |      |          |            |               |                  |                   |        |Paragraph 25|
+   +---------+--------+-----------+------+----------+------------+---------------+------------------+-------------------+--------+------------+
+   |AES-FF3-1|"1.0"   |["encrypt",|[128, |          |            |               |                  |                   |        |At least one|
+   |         |        |"decrypt"] |192,  |          |            |               |                  |                   |        |set of      |
+   |         |        |           |256]  |          |            |               |                  |                   |        |capabilities|
+   |         |        |           |      |          |            |               |                  |                   |        |is required.|
+   |         |        |           |      |          |            |               |                  |                   |        |See         |
+   |         |        |           |      |          |            |               |                  |                   |        |Section 7.3,|
+   |         |        |           |      |          |            |               |                  |                   |        |Paragraph 25|
+   +---------+--------+-----------+------+----------+------------+---------------+------------------+-------------------+--------+------------+
+
+         Table 9: Miscellaneous Block Cipher Algorithm Capabilities
+                             Applicability Grid
+
+      |  NOTE 1: keyingOption 2 SHALL only be available for decrypt
+      |  operations.
+
+      |  NOTE 2: AES-CTR implementations must support a payloadLen of
+      |  128-bits.  For AES-CTR, when values less than 128 are supplied
+      |  for payloadLen, these lengths refer to the bit sizes supported
+      |  in the last incomplete block (less than 128 bits) of the cipher
+      |  or plain text.
+
+   The following grid outlines which properties are REQUIRED within the
+   capabilities object array in use for ACVP-AES-FF1 and ACVP-AES-FF3-1.
+
+   +========+=======================================+=======+==============++
+   |Property|Description                            |Type   |Valid Values  ||
+   |Name    |                                       |       |              ||
+   +========+=======================================+=======+==============++
+   |alphabet|An alphabet the IUT supports for Format|string |Alphanumeric  ||
+   |        |Preserving Encryption.  Example        |       |non repeating ||
+   |        |"0123456789abcdefghijklmnopqrstuvwxyz".|       |characters.   ||
+   |        |Alphabets should be a minimum of two   |       |              ||
+   |        |characters, and a maximum of 64 (all   |       |              ||
+   |        |numbers and upper and lower case       |       |              ||
+   |        |letters, additionally "+" and "/").    |       |              ||
+   +--------+---------------------------------------+-------+--------------++
+   |radix   |The number base for this capability,   |integer|2-64          ||
+   |        |should match the number of characters  |       |              ||
+   |        |from the alphabet.                     |       |              ||
+   +--------+---------------------------------------+-------+--------------++
+   |minLen  |The minimum payload length the IUT can |integer|2 - maxLen    ||
+   |        |support for this alphabet.             |       |              ||
+   +--------+---------------------------------------+-------+--------------++
+   |maxLen  |The maximum payload length the IUT can |integer|minLen -      ||
+   |        |support for this alphabet.             |       |variable      ||
+   |        |                                       |       |calculation   ||
+   |        |                                       |       |based on radix||
+   |        |                                       |       |and algorithm,||
+   |        |                                       |       |see           ||
+   |        |                                       |       |[SP800-38Gr1].||
+   +--------+---------------------------------------+-------+--------------++
+
+                                  Table 10
+
+8.  Test Vectors
+
+   The ACVP server provides test vectors to the ACVP client, which are
+   then processed and returned to the ACVP server for validation.  A
+   typical ACVP validation test session would require multiple test
+   vector sets to be downloaded and processed by the ACVP client.  Each
+   test vector set represents an individual cryptographic algorithm
+   defined during the capability exchange.  This section describes the
+   JSON schema for a test vector set used with Symmetric Block Cipher
+   algorithms.
+
+   The test vector set JSON schema is a multi-level hierarchy that
+   contains meta data for the entire vector set as well as individual
+   test vectors to be processed by the ACVP client.  The following table
+   describes the JSON elements at the top level of the hierarchy.
+
+    +=============+======================================+===========+
+    | JSON Values | Description                          | JSON Type |
+    +=============+======================================+===========+
+    | acvVersion  | Protocol version identifier          | string    |
+    +-------------+--------------------------------------+-----------+
+    | vsId        | Unique numeric vector set identifier | integer   |
+    +-------------+--------------------------------------+-----------+
+    | algorithm   | Algorithm defined in the capability  | string    |
+    |             | exchange                             |           |
+    +-------------+--------------------------------------+-----------+
+    | mode        | Mode defined in the capability       | string    |
+    |             | exchange                             |           |
+    +-------------+--------------------------------------+-----------+
+    | revision    | Protocol test revision selected      | string    |
+    +-------------+--------------------------------------+-----------+
+    | testGroups  | Array of test group JSON objects,    | array     |
+    |             | which are defined in Section 8.1     |           |
+    +-------------+--------------------------------------+-----------+
+
+              Table 11: Top Level Test Vector JSON Elements
+
+   An example of this would look like this
+
+   [
+     {
+       "acvVersion": <version>
+     },
+     {
+       "vsId": 1,
+       "algorithm": "Alg1",
+       "mode": "Mode1",
+       "revision": "Revision1.0",
+       "testGroups": [ ... ]
+     }
+   ]
+
+8.1.  Test Groups
+
+   Test vector sets MUST contain one or more test groups, each sharing
+   similar properties.  For instance, all test vectors that use the same
+   key size would be grouped together.  The testGroups element at the
+   top level of the test vector JSON object SHALL be the array of test
+   groups.  The Test Group JSON object MUST contain meta-data that
+   applies to all test cases within the group.  The following table
+   describes the JSON elements that MAY appear from the server in the
+   Test Group JSON object:
+
+    +==============+=======================================+==========+
+    | JSON Value   | Description                           | JSON     |
+    |              |                                       | type     |
+    +==============+=======================================+==========+
+    | tgId         | Numeric identifier for the test       | integer  |
+    |              | group, unique across the entire       |          |
+    |              | vector set.                           |          |
+    +--------------+---------------------------------------+----------+
+    | testType     | The test category type (AFT, MCT or   | string   |
+    |              | counter).  See Section 6 for more     |          |
+    |              | information about what these tests    |          |
+    |              | do, and how to implement them.        |          |
+    +--------------+---------------------------------------+----------+
+    | direction    | The IUT processing direction: encrypt | string   |
+    |              | or decrypt                            |          |
+    +--------------+---------------------------------------+----------+
+    | ivGen        | IV generation method                  | string   |
+    +--------------+---------------------------------------+----------+
+    | ivGenMode    | IV generation method                  | string   |
+    +--------------+---------------------------------------+----------+
+    | saltGen      | Salt generation method                | string   |
+    +--------------+---------------------------------------+----------+
+    | keyLen       | Length of key in bits to use          | integer  |
+    +--------------+---------------------------------------+----------+
+    | keyingOption | The TDES keying option to use         | integer  |
+    +--------------+---------------------------------------+----------+
+    | ivLen        | Length of IV in bits to use           | integer  |
+    +--------------+---------------------------------------+----------+
+    | payloadLen   | Length of plaintext or ciphertext in  | integer  |
+    |              | bits to use                           |          |
+    +--------------+---------------------------------------+----------+
+    | aadLen       | Length of AAD in bits to use          | integer  |
+    +--------------+---------------------------------------+----------+
+    | tagLen       | Length of AEAD tag in bits to use     | integer  |
+    +--------------+---------------------------------------+----------+
+    | alphabet     | Characters representing the alphabet  | string   |
+    |              | in use for the group.  ACVP-AES-FF1   |          |
+    |              | and ACVP-AES-FF3-1 only.              |          |
+    +--------------+---------------------------------------+----------+
+    | radix        | The number base in use for the group  | integer  |
+    |              | (should match the number of           |          |
+    |              | characters from the alphabet.  ACVP-  |          |
+    |              | AES-FF1 and ACVP-AES-FF3-1 only.      |          |
+    +--------------+---------------------------------------+----------+
+    | tweakMode    | Indicates the format of the tweak     | string   |
+    |              | value input for AES-XTS.  A value of  |          |
+    |              | 'hex' indicates that the test cases   |          |
+    |              | in the test group will contain a      |          |
+    |              | 'tweakValue' element with a           |          |
+    |              | 32-character hexadecimal string for a |          |
+    |              | value.  A value of 'number' indicates |          |
+    |              | that the test cases in the test group |          |
+    |              | will contain a 'sequenceNumber' (Data |          |
+    |              | Unit Sequence Number) element with an |          |
+    |              | integer value between 0 and 255.      |          |
+    +--------------+---------------------------------------+----------+
+    | tests        | Array of individual test case JSON    | array of |
+    |              | objects, which are defined in         | testCase |
+    |              | Section 8.2                           | objects  |
+    +--------------+---------------------------------------+----------+
+
+                      Table 12: Test Group JSON Object
+
+   Some properties MUST appear in the prompt file from the server for
+   every testGroup object.  They are as follows:
+
+   *  tgId
+
+   *  direction
+
+   *  testType
+
+   *  tests
+
+   The other properties MAY appear depending on the algorithm selected
+   for the test vector set.  The following grid defines the REQUIRED
+   properties for each standard block cipher, as well as the valid
+   values a server MAY use:
+
+      +==================+==========+===============+==============+
+      | algorithm        | revision | keyLen        | keyingOption |
+      +==================+==========+===============+==============+
+      | ACVP-AES-ECB     | "1.0"    | 128, 192, 256 |              |
+      +------------------+----------+---------------+--------------+
+      | ACVP-AES-CBC     | "1.0"    | 128, 192, 256 |              |
+      +------------------+----------+---------------+--------------+
+      | ACVP-AES-OFB     | "1.0"    | 128, 192, 256 |              |
+      +------------------+----------+---------------+--------------+
+      | ACVP-AES-CFB1    | "1.0"    | 128, 192, 256 |              |
+      +------------------+----------+---------------+--------------+
+      | ACVP-AES-CFB8    | "1.0"    | 128, 192, 256 |              |
+      +------------------+----------+---------------+--------------+
+      | ACVP-AES-CFB128  | "1.0"    | 128, 192, 256 |              |
+      +------------------+----------+---------------+--------------+
+      | ACVP-AES-FF1     | "1.0"    | 128, 192, 256 |              |
+      +------------------+----------+---------------+--------------+
+      | ACVP-AES-FF3-1   | "1.0"    | 128, 192, 256 |              |
+      +------------------+----------+---------------+--------------+
+      | ACVP-TDES-ECB    | "1.0"    |               | 1, 2         |
+      +------------------+----------+---------------+--------------+
+      | ACVP-TDES-CBC    | "1.0"    |               | 1, 2         |
+      +------------------+----------+---------------+--------------+
+      | ACVP-TDES-CBCI   | "1.0"    |               | 1, 2         |
+      +------------------+----------+---------------+--------------+
+      | ACVP-TDES-CFB1   | "1.0"    |               | 1, 2         |
+      +------------------+----------+---------------+--------------+
+      | ACVP-TDES-CFB8   | "1.0"    |               | 1, 2         |
+      +------------------+----------+---------------+--------------+
+      | ACVP-TDES-CFB64  | "1.0"    |               | 1, 2         |
+      +------------------+----------+---------------+--------------+
+      | ACVP-TDES-CFBP1  | "1.0"    |               | 1, 2         |
+      +------------------+----------+---------------+--------------+
+      | ACVP-TDES-CFBP8  | "1.0"    |               | 1, 2         |
+      +------------------+----------+---------------+--------------+
+      | ACVP-TDES-CFBP64 | "1.0"    |               | 1, 2         |
+      +------------------+----------+---------------+--------------+
+      | ACVP-TDES-OFB    | "1.0"    |               | 1, 2         |
+      +------------------+----------+---------------+--------------+
+      | ACVP-TDES-OFBI   | "1.0"    |               | 1, 2         |
+      +------------------+----------+---------------+--------------+
+
+       Table 13: Prompt Test Group Block Cipher Applicability Grid
+
+   The following grid defines when each property is REQUIRED from a
+   server for each authenticated block cipher:
+
+   +=========+========+======+===========+=========+===========+======+==========+======+======+=======+
+   |algorithm|revision|keyLen|ivGen      |ivGenMode|saltGen    |ivLen |payloadLen|aadLen|tagLen|saltLen|
+   +=========+========+======+===========+=========+===========+======+==========+======+======+=======+
+   |ACVP-AES-|"1.0"   |128,  |"internal",|"8.2.1", |           |within|within    |within|within|       |
+   |GCM      |        |192,  |"external" |"8.2.2"  |           |domain|domain    |domain|domain|       |
+   |         |        |256   |           |         |           |      |          |      |      |       |
+   +---------+--------+------+-----------+---------+-----------+------+----------+------+------+-------+
+   |ACVP-AES-|"1.0"   |128,  |           |         |           |96    |within    |within|128   |       |
+   |GCM-SIV  |        |256   |           |         |           |      |domain    |domain|      |       |
+   +---------+--------+------+-----------+---------+-----------+------+----------+------+------+-------+
+   |ACVP-AES-|"1.0"   |128,  |"internal",|"8.2.1", |"internal",|96    |within    |within|within|96     |
+   |XPN      |        |192,  |"external" |"8.2.2"  |"external" |      |domain    |domain|domain|       |
+   |         |        |256   |           |         |           |      |          |      |      |       |
+   +---------+--------+------+-----------+---------+-----------+------+----------+------+------+-------+
+   |ACVP-AES-|"1.0"   |128,  |           |         |           |within|within    |within|within|       |
+   |CCM      |        |192,  |           |         |           |domain|domain    |domain|domain|       |
+   |         |        |256   |           |         |           |      |          |      |      |       |
+   +---------+--------+------+-----------+---------+-----------+------+----------+------+------+-------+
+
+           Table 14: Prompt Test Group Authenticated Block Cipher
+                             Applicability Grid
+
+      |  NOTE: The particular values of a domain are REQUIRED to be an
+      |  integer element of the domain present in the registration used.
+      |  The ACVP server MAY select predetermined or random values with
+      |  particular features (ex. on a block boundary, or not on a block
+      |  boundary) within the domain the client provided in the
+      |  registration.
+
+   The following grid defines when each property is REQUIRED from a
+   server for a key-wrap block cipher:
+
+   +==============+==========+===============+===========+============+
+   | algorithm    | revision | keyLen        | kwCipher  | payloadLen |
+   +==============+==========+===============+===========+============+
+   | ACVP-AES-KW  | "1.0"    | 128, 192, 256 | "cipher", | within     |
+   |              |          |               | "inverse" | domain     |
+   +--------------+----------+---------------+-----------+------------+
+   | ACVP-AES-KWP | "1.0"    | 128, 192, 256 | "cipher", | within     |
+   |              |          |               | "inverse" | domain     |
+   +--------------+----------+---------------+-----------+------------+
+   | ACVP-TDES-KW | "1.0"    |               | "cipher", | within     |
+   |              |          |               | "inverse" | domain     |
+   +--------------+----------+---------------+-----------+------------+
+
+   Table 15: Prompt Test Group Key-Wrap Block Cipher Applicability Grid
+
+      |  NOTE: The particular values of a domain are REQUIRED to be an
+      |  integer element of the domain present in the registration used.
+      |  The ACVP server MAY select predetermined or random values with
+      |  particular features (ex. on a block boundary, or not on a block
+      |  boundary) within the domain the client provided in the
+      |  registration.
+
+   The following grid defines when each property is REQUIRED from a
+   server for the miscellaneous block ciphers:
+
+   +=========+========+======+============+===========+========+=========+==========+
+   |algorithm|revision|keyLen|keyingOption|incremental|overflow|tweakMode|payloadLen|
+   +=========+========+======+============+===========+========+=========+==========+
+   |ACVP-AES-|"1.0"   |128,  |            |           |        |         |          |
+   |CBC-CS1  |        |192,  |            |           |        |         |          |
+   |         |        |256   |            |           |        |         |          |
+   +---------+--------+------+------------+-----------+--------+---------+----------+
+   |ACVP-AES-|"1.0"   |128,  |            |           |        |         |          |
+   |CBC-CS2  |        |192,  |            |           |        |         |          |
+   |         |        |256   |            |           |        |         |          |
+   +---------+--------+------+------------+-----------+--------+---------+----------+
+   |ACVP-AES-|"1.0"   |128,  |            |           |        |         |          |
+   |CBC-CS3  |        |192,  |            |           |        |         |          |
+   |         |        |256   |            |           |        |         |          |
+   +---------+--------+------+------------+-----------+--------+---------+----------+
+   |ACVP-AES-|"1.0"   |128,  |            |true, false|true,   |         |          |
+   |CTR      |        |192,  |            |           |false   |         |          |
+   |         |        |256   |            |           |        |         |          |
+   +---------+--------+------+------------+-----------+--------+---------+----------+
+   |ACVP-AES-|"1.0"   |128,  |            |           |        |"hex",   |within    |
+   |XTS      |        |256   |            |           |        |"number" |domain    |
+   +---------+--------+------+------------+-----------+--------+---------+----------+
+   |ACVP-AES-|"2.0"   |128,  |            |           |        |"hex",   |          |
+   |XTS      |        |256   |            |           |        |"number" |          |
+   +---------+--------+------+------------+-----------+--------+---------+----------+
+   |ACVP-    |"1.0"   |      |1, 2        |true, false|true,   |         |          |
+   |TDES-CTR |        |      |            |           |false   |         |          |
+   +---------+--------+------+------------+-----------+--------+---------+----------+
+   |ACVP-AES-|"1.0"   |128,  |            |           |        |         |          |
+   |FF1      |        |192,  |            |           |        |         |          |
+   |         |        |256   |            |           |        |         |          |
+   +---------+--------+------+------------+-----------+--------+---------+----------+
+   |ACVP-AES-|"1.0"   |128,  |            |           |        |         |          |
+   |FF3-1    |        |192,  |            |           |        |         |          |
+   |         |        |256   |            |           |        |         |          |
+   +---------+--------+------+------------+-----------+--------+---------+----------+
+
+           Table 16: Prompt Test Group Miscellaneous Block Cipher
+                             Applicability Grid
+
+      |  NOTE: The particular values of a domain are REQUIRED to be an
+      |  integer element of the domain present in the registration used.
+      |  The ACVP server MAY select predetermined or random values with
+      |  particular features (ex. on a block boundary, or not on a block
+      |  boundary) within the domain the client provided in the
+      |  registration.
+
+8.2.  Test Cases
+
+   Each test group SHALL contain an array of one or more test cases.
+   Each test case is a JSON object that represents a single case to be
+   processed by the ACVP client.  The following table describes the JSON
+   elements for each test case.
+
+      +================+==================================+=========+
+      | JSON Value     | Description                      | JSON    |
+      |                |                                  | type    |
+      +================+==================================+=========+
+      | tcId           | Numeric identifier for the test  | integer |
+      |                | case, unique across the entire   |         |
+      |                | vector set.                      |         |
+      +----------------+----------------------------------+---------+
+      | key            | Encryption key to use for AES    | string  |
+      |                |                                  | (hex)   |
+      +----------------+----------------------------------+---------+
+      | key1, key2,    | Encryption keys to use for TDES  | string  |
+      | key3           |                                  | (hex)   |
+      +----------------+----------------------------------+---------+
+      | iv             | IV to use                        | string  |
+      |                |                                  | (hex)   |
+      +----------------+----------------------------------+---------+
+      | tweak          | Tweak used to form an IV for     | string  |
+      |                | AES-FF1 and AES-FF3-1            | (hex)   |
+      +----------------+----------------------------------+---------+
+      | tweakLen       | Length of the tweak for AES-FF1  | integer |
+      |                | and AES-FF3-1                    |         |
+      +----------------+----------------------------------+---------+
+      | tweakValue     | Tweak value used to form an IV   | string  |
+      |                | for AES-XTS when the tweakMode   | (hex)   |
+      |                | for the group is 'hex'.  A       |         |
+      |                | 32-character hexadecimal string. |         |
+      +----------------+----------------------------------+---------+
+      | sequenceNumber | (Data Unit Sequence Number)      | integer |
+      |                | Integer used to form an IV for   |         |
+      |                | AES-XTS when the tweakMode for   |         |
+      |                | the group is 'number'.  An       |         |
+      |                | integer between 0 and 255.       |         |
+      +----------------+----------------------------------+---------+
+      | salt           | The salt to use in AES-XPN       | string  |
+      |                | (required for AES-XPN only)      | (hex)   |
+      +----------------+----------------------------------+---------+
+      | pt             | Plaintext to use                 | string  |
+      |                |                                  | (hex)   |
+      +----------------+----------------------------------+---------+
+      | ct             | Ciphertext to use                | string  |
+      |                |                                  | (hex)   |
+      +----------------+----------------------------------+---------+
+      | payloadLen     | The length of the provided       | integer |
+      |                | Plaintext or Ciphertext in bits. |         |
+      |                | Only the most significant        |         |
+      |                | 'payloadLen' bits will be used.  |         |
+      +----------------+----------------------------------+---------+
+      | dataUnitLen    | Length of the data unit in bits  | integer |
+      |                | for ACVP-AES-XTS                 |         |
+      +----------------+----------------------------------+---------+
+      | aad            | AAD to use for AEAD algorithms   | string  |
+      |                |                                  | (hex)   |
+      +----------------+----------------------------------+---------+
+      | tag            | Tag to use for AEAD algorithms   | string  |
+      |                |                                  | (hex)   |
+      +----------------+----------------------------------+---------+
+
+                      Table 17: Test Case JSON Object
+
+      |  NOTE: The applicability of each test case property is dependent
+      |  on the test group and test vector (algorithm) properties.  Each
+      |  test type within the test group requires specific operations to
+      |  be performed and thus specific data returned to the server.
+      |  Consult Section 6 for more information.  The tcId property MUST
+      |  appear within every test case sent to and from the server.
+
+   The following grid identifies the algorithms whose test case JSON
+   objects will contain the 'payloadLen' property and the valid values a
+   servery MAY use.
+
+   +==================+==========+======================+=============+
+   | Algorithm        | Revision | Applicability        | payloadLen  |
+   +==================+==========+======================+=============+
+   | ACVP-AES-CBC-CS1 | "1.0"    | for all test cases   | within      |
+   |                  |          |                      | domain (see |
+   |                  |          |                      | Table 9)    |
+   +------------------+----------+----------------------+-------------+
+   | ACVP-AES-CBC-CS2 | "1.0"    | for all test cases   | within      |
+   |                  |          |                      | domain (see |
+   |                  |          |                      | Table 9)    |
+   +------------------+----------+----------------------+-------------+
+   | ACVP-AES-CBC-CS3 | "1.0"    | for all test cases   | within      |
+   |                  |          |                      | domain (see |
+   |                  |          |                      | Table 9)    |
+   +------------------+----------+----------------------+-------------+
+   | ACVP-AES-CFB1    | "1.0"    | for all test cases   | 1           |
+   +------------------+----------+----------------------+-------------+
+   | ACVP-AES-CTR     | "1.0"    | for the test cases   | within      |
+   |                  |          | of some test groups, | domain (see |
+   |                  |          | but not others       | Table 9)    |
+   +------------------+----------+----------------------+-------------+
+   | ACVP-AES-XTS     | "2.0"    | for all test cases   | within      |
+   |                  |          |                      | domain (see |
+   |                  |          |                      | Table 8)    |
+   +------------------+----------+----------------------+-------------+
+
+           Table 18: Applicability of the 'payloadLen' Property
+
+      |  NOTE: Table 18 identifies the algorithms for which the
+      |  'payloadLen' property will be present as part of the test case
+      |  JSON objects.  Please also be aware that other algorithms
+      |  include the 'payloadLen' property as part of the test group
+      |  JSON object.  For more information, see Table 14, Table 15, and
+      |  Table 16.
+
+9.  Test Vector Responses
+
+   After the ACVP client downloads and processes a vector set, it SHALL
+   send the response vectors back to the ACVP server within the alloted
+   timeframe.  The following table describes the JSON object that
+   represents a vector set response.
+
+    +============+=======================================+===========+
+    | JSON Value | Description                           | JSON type |
+    +============+=======================================+===========+
+    | acvVersion | Protocol version identifier           | string    |
+    +------------+---------------------------------------+-----------+
+    | vsId       | Unique numeric identifier for the     | integer   |
+    |            | vector set                            |           |
+    +------------+---------------------------------------+-----------+
+    | testGroups | Array of JSON objects that represent  | array of  |
+    |            | each test vector group.  See Table 20 | testGroup |
+    |            |                                       | objects   |
+    +------------+---------------------------------------+-----------+
+
+                Table 19: Vector Set Response JSON Object
+
+   The testGroup Response section is used to organize the ACVP client
+   response in a similar manner to how it receives vectors.  Several
+   algorithms SHALL require the client to send back group level
+   properties in its response.  This structure helps accommodate that.
+
+      +============+=============================+==================+
+      | JSON Value | Description                 | JSON type        |
+      +============+=============================+==================+
+      | tgId       | The test group identifier   | integer          |
+      +------------+-----------------------------+------------------+
+      | tests      | The tests associated to the | array of         |
+      |            | group specified in tgId     | testCase objects |
+      +------------+-----------------------------+------------------+
+
+              Table 20: Vector Set Group Response JSON Object
+
+   Each test case is a JSON object that represents a single test object
+   to be processed by the ACVP client.  The following table describes
+   the JSON elements for each test case object.
+
+    +==============+==============================+==================+
+    | JSON Value   | Description                  | JSON type        |
+    +==============+==============================+==================+
+    | tcId         | Numeric identifier for the   | integer          |
+    |              | test case, unique across the |                  |
+    |              | entire vector set.           |                  |
+    +--------------+------------------------------+------------------+
+    | pt           | The IUT's pt response to a   | string (hex)     |
+    |              | decrypt test                 |                  |
+    +--------------+------------------------------+------------------+
+    | ct           | The IUT's ct response to an  | string (hex)     |
+    |              | encrypt test                 |                  |
+    +--------------+------------------------------+------------------+
+    | testPassed   | Some test cases included     | boolean          |
+    |              | with decrypt operations in   |                  |
+    |              | AES-GCM, AES-CCM, AES-XPN,   |                  |
+    |              | AES-KW, AES-KWP, and TDES-KW |                  |
+    |              | will have expected failures. |                  |
+    +--------------+------------------------------+------------------+
+    | resultsArray | Array of JSON objects that   | array of objects |
+    |              | represent each iteration of  | containing pt,   |
+    |              | a Monte Carlo Test.  Each    | ct and iv        |
+    |              | iteration will contain the   | (except for ECB  |
+    |              | key(s), pt, ct and iv        | mode)            |
+    +--------------+------------------------------+------------------+
+
+                 Table 21: Test Case Results JSON Object
+
+      |  NOTE: The tcId MUST be included in every test case object sent
+      |  between the client and the server.
+
+   The following shows AES-ECB AFT and MCT request vectors.
+
+   [{
+     "acvVersion": "{acvp-version}"
+   },{
+     "vsId": 2056,
+     "algorithm": "ACVP-AES-ECB",
+       "revision": "1.0",
+     "testGroups": [{
+         "tgId": 1,
+               "testType": "AFT",
+               "direction": "encrypt",
+               "keylen": 128,
+               "tests": [
+                   {
+                       "tcId": 1,
+                       "plainText": "F34481E...",
+                       "key": "0000000000000..."
+                   },
+                   {
+                       "tcId": 2,
+                       "plainText": "9798C46...",
+                       "key": "0000000000000..."
+                   }
+         ]
+       },
+       {
+               "tgId": 25,
+               "testType": "AFT",
+               "direction": "encrypt",
+               "keylen": 128,
+               "tests": [
+                   {
+                       "tcId": 2079,
+                       "plainText": "1C46FA6...",
+                       "key": "18D3248D32630..."
+                   },
+                   {
+                       "tcId": 2080,
+                       "plainText": "5AC1B2D...",
+                       "key": "26007B74016FA..."
+                   }
+         ]
+       },
+           {
+           "tgId": 31,
+           "testType": "MCT",
+           "direction": "encrypt",
+           "keylen": 128,
+           "tests": [
+                   {
+                       "tcId": 2139,
+                       "key": "9489F6FFA4A74...",
+                 "pt": "2D984D2F1FC178..."
+                   }
+               ]
+           },
+           {
+           "tgId": 34,
+           "testType": "MCT",
+           "direction": "decrypt",
+           "keylen": 128,
+           "tests": [
+                   {
+                       "tcId": 2142
+                       "key": "9489F6FFA4A74...",
+                 "ct": "2D984D2F1FC178..."
+                   }
+               ]
+           }
+     ]
+   }]
+
+   The following shows AES-ECB AFT and MCT responses.
+
+   [{
+     "acvVersion": "{acvp-version}"
+   },{
+     "vsId": 2056,
+     "testGroups": [{
+         "tgId": 1,
+         "tests": [{
+             "tcId": 1,
+             "ct": "43FB8A36F168E3..."
+           },
+           {
+             "tcId": 2,
+             "ct": "27549D65BE8056..."
+           }
+         ]
+       },
+       {
+         "tgId": 1,
+         "tests": [{
+             "tcId": 31,
+             "pt": "F7F42B062BD643..."
+           },
+           {
+             "tcId": 32,
+             "pt": "EAF9AAA67B6C0E..."
+           }
+         ]
+       },
+       {
+         "tgId": 3,
+         "tests": [{
+           "tcId": 61,
+           "resultsArray": [{
+               "key": "A4A8255E7...",
+               "pt": "B3B8F494D0...",
+               "ct": "619D5B0921..."
+             },
+             {
+               "key": "C5357E575...",
+               "pt": "619D5B0921...",
+               "ct": "28CF1C5DD2..."
+             }
+           ]
+         }]
+       },
+       {
+         "tgId": 4,
+         "tests": [{
+           "tcId": 64,
+           "resultsArray": [{
+               "key": "4D3BE577E...",
+               "ct": "0FE92E22BA...",
+               "pt": "73ED187BFE..."
+             },
+             {
+               "key": "3ED6FD0C1...",
+               "ct": "73ED187BFE...",
+               "pt": "59550A36E1..."
+             }
+           ]
+         }]
+       }
+     ]
+   }]

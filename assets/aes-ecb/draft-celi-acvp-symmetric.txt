@@ -50,14 +50,6 @@ Table of Contents
      4.1.  Notation conventions  . . . . . . . . . . . . . . . . . .   3
      4.2.  Terms and Definitions . . . . . . . . . . . . . . . . . .   3
        4.2.1.  Prompt  . . . . . . . . . . . . . . . . . . . . . . .   4
-
-
-
-Celi & Hammett             Expires 3 May 2027                   [Page 1]
-
-Internet-Draft        ACVP Symmetric Block Ciphers          October 2026
-
-
        4.2.2.  Registration  . . . . . . . . . . . . . . . . . . . .   4
        4.2.3.  Response  . . . . . . . . . . . . . . . . . . . . . .   4
        4.2.4.  Test Case . . . . . . . . . . . . . . . . . . . . . .   4
@@ -105,15 +97,6 @@ Internet-Draft        ACVP Symmetric Block Ciphers          October 2026
    The authors thank John Foley for putting together an early draft of
    this specification.
 
-
-
-
-
-Celi & Hammett             Expires 3 May 2027                   [Page 2]
-
-Internet-Draft        ACVP Symmetric Block Ciphers          October 2026
-
-
 2.  Abstract
 
    This document defines the JSON schema for testing Symmetric Block
@@ -159,16 +142,6 @@ Internet-Draft        ACVP Symmetric Block Ciphers          October 2026
    all capitals, as shown here.
 
 4.2.  Terms and Definitions
-
-
-
-
-
-
-Celi & Hammett             Expires 3 May 2027                   [Page 3]
-
-Internet-Draft        ACVP Symmetric Block Ciphers          October 2026
-
 
 4.2.1.  Prompt
 
@@ -218,14 +191,6 @@ Internet-Draft        ACVP Symmetric Block Ciphers          October 2026
 
    *  ACVP-AES-CBC-CS2 / "1.0"
 
-
-
-
-Celi & Hammett             Expires 3 May 2027                   [Page 4]
-
-Internet-Draft        ACVP Symmetric Block Ciphers          October 2026
-
-
    *  ACVP-AES-CBC-CS3 / "1.0"
 
    *  ACVP-AES-OFB / "1.0"
@@ -274,14 +239,6 @@ Internet-Draft        ACVP Symmetric Block Ciphers          October 2026
 
    *  ACVP-TDES-CFBP8 / "1.0"
 
-
-
-
-Celi & Hammett             Expires 3 May 2027                   [Page 5]
-
-Internet-Draft        ACVP Symmetric Block Ciphers          October 2026
-
-
    *  ACVP-TDES-CFBP64 / "1.0"
 
    *  ACVP-TDES-OFB / "1.0"
@@ -327,16 +284,6 @@ Internet-Draft        ACVP Symmetric Block Ciphers          October 2026
    There are three types of tests for block ciphers: functional tests,
    Monte Carlo tests and counter tests.  Each has a specific value to be
    used in the testType field.  The testType field definitions are:
-
-
-
-
-
-
-Celi & Hammett             Expires 3 May 2027                   [Page 6]
-
-Internet-Draft        ACVP Symmetric Block Ciphers          October 2026
-
 
    *  "AFT" - Algorithm Functional Test.  These tests can be processed
       by the client using a normal 'encrypt' or 'decrypt' operation.
@@ -387,13 +334,6 @@ Internet-Draft        ACVP Symmetric Block Ciphers          October 2026
    The initial condition for the test is the tuple (KEY, PT) set to some
    values.
 
-
-
-Celi & Hammett             Expires 3 May 2027                   [Page 7]
-
-Internet-Draft        ACVP Symmetric Block Ciphers          October 2026
-
-
    The algorithm is shown in Section 6.1.1.1.1.
 
    Key[0] = KEY
@@ -442,13 +382,6 @@ Internet-Draft        ACVP Symmetric Block Ciphers          October 2026
        AES_KEY_SHUFFLE(Key, CT)
        IV[i+1] = CT[j]
        PT[0] = CT[j-1]
-
-
-
-Celi & Hammett             Expires 3 May 2027                   [Page 8]
-
-Internet-Draft        ACVP Symmetric Block Ciphers          October 2026
-
 
 6.1.1.2.2.  Decrypt
 
@@ -499,13 +432,6 @@ Internet-Draft        ACVP Symmetric Block Ciphers          October 2026
    The initial condition for the test is the tuple (KEY, IV, PT) set to
    some values.
 
-
-
-Celi & Hammett             Expires 3 May 2027                   [Page 9]
-
-Internet-Draft        ACVP Symmetric Block Ciphers          October 2026
-
-
    The algorithm is shown in Section 6.1.1.4.1.
 
    Key[0] = Key
@@ -551,17 +477,6 @@ Internet-Draft        ACVP Symmetric Block Ciphers          October 2026
 
    The algorithm is shown in Section 6.1.1.5.1.
 
-
-
-
-
-
-
-Celi & Hammett             Expires 3 May 2027                  [Page 10]
-
-Internet-Draft        ACVP Symmetric Block Ciphers          October 2026
-
-
    Key[0] = Key
    IV[0] = IV
    PT[0] = PT
@@ -604,19 +519,6 @@ Internet-Draft        ACVP Symmetric Block Ciphers          October 2026
    some values.
 
    The algorithm is shown in Section 6.1.1.6.1.
-
-
-
-
-
-
-
-
-
-Celi & Hammett             Expires 3 May 2027                  [Page 11]
-
-Internet-Draft        ACVP Symmetric Block Ciphers          October 2026
-
 
    Key[0] = Key
    IV[0] = IV
@@ -666,14 +568,6 @@ Internet-Draft        ACVP Symmetric Block Ciphers          October 2026
 
 6.1.1.8.  TDES Monte Carlo Test - ECB mode
 
-
-
-
-Celi & Hammett             Expires 3 May 2027                  [Page 12]
-
-Internet-Draft        ACVP Symmetric Block Ciphers          October 2026
-
-
 6.1.1.8.1.  Encrypt
 
    The initial condition for the test is the tuple (KEY1, KEY2, KEY3,
@@ -717,18 +611,6 @@ Internet-Draft        ACVP Symmetric Block Ciphers          October 2026
    IV, PT) set to some values.
 
    The algorithm is shown in Section 6.1.1.9.1.
-
-
-
-
-
-
-
-
-Celi & Hammett             Expires 3 May 2027                  [Page 13]
-
-Internet-Draft        ACVP Symmetric Block Ciphers          October 2026
-
 
    Key1[0] = KEY1
    Key2[0] = KEY2
@@ -779,13 +661,6 @@ Internet-Draft        ACVP Symmetric Block Ciphers          October 2026
 
    The algorithm is shown in Section 6.1.1.10.1.
 
-
-
-Celi & Hammett             Expires 3 May 2027                  [Page 14]
-
-Internet-Draft        ACVP Symmetric Block Ciphers          October 2026
-
-
    Key1[0] = KEY1
    Key2[0] = KEY2
    Key3[0] = KEY3
@@ -833,15 +708,6 @@ Internet-Draft        ACVP Symmetric Block Ciphers          October 2026
 
    The algorithm is shown in Section 6.1.1.10.2.
 
-
-
-
-
-Celi & Hammett             Expires 3 May 2027                  [Page 15]
-
-Internet-Draft        ACVP Symmetric Block Ciphers          October 2026
-
-
    Key1[0] = KEY1
    Key2[0] = KEY2
    Key3[0] = KEY3
@@ -887,17 +753,6 @@ Internet-Draft        ACVP Symmetric Block Ciphers          October 2026
 
    The algorithm is shown in Section 6.1.1.11.1.
 
-
-
-
-
-
-
-Celi & Hammett             Expires 3 May 2027                  [Page 16]
-
-Internet-Draft        ACVP Symmetric Block Ciphers          October 2026
-
-
    Key1[0] = KEY1
    Key2[0] = KEY2
    Key3[0] = KEY3
@@ -933,26 +788,6 @@ Internet-Draft        ACVP Symmetric Block Ciphers          October 2026
    Table 43 of SP 800-20.
 
    The algorithm is shown in Section 6.1.1.11.2.
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-Celi & Hammett             Expires 3 May 2027                  [Page 17]
-
-Internet-Draft        ACVP Symmetric Block Ciphers          October 2026
-
 
    Key1[0] = KEY1
    Key2[0] = KEY2
@@ -991,25 +826,6 @@ Internet-Draft        ACVP Symmetric Block Ciphers          October 2026
 
    The algorithm is shown in Section 6.1.1.12.1.
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-Celi & Hammett             Expires 3 May 2027                  [Page 18]
-
-Internet-Draft        ACVP Symmetric Block Ciphers          October 2026
-
-
    Key1[0] = KEY1
    Key2[0] = KEY2
    Key3[0] = KEY3
@@ -1047,25 +863,6 @@ Internet-Draft        ACVP Symmetric Block Ciphers          October 2026
 
    The algorithm is shown in Section 6.1.1.12.2.
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-Celi & Hammett             Expires 3 May 2027                  [Page 19]
-
-Internet-Draft        ACVP Symmetric Block Ciphers          October 2026
-
-
    Key1[0] = KEY1
    Key2[0] = KEY2
    Key3[0] = KEY3
@@ -1101,26 +898,6 @@ Internet-Draft        ACVP Symmetric Block Ciphers          October 2026
    IV, PT) set to some values.
 
    The algorithm is shown in Section 6.1.1.13.1.
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-Celi & Hammett             Expires 3 May 2027                  [Page 20]
-
-Internet-Draft        ACVP Symmetric Block Ciphers          October 2026
-
 
    Key1[0] = KEY1
    Key2[0] = KEY2
@@ -1161,22 +938,6 @@ Internet-Draft        ACVP Symmetric Block Ciphers          October 2026
    IV1, IV2, IV3, PT) set to some values.
 
    The algorithm is shown in Section 6.1.1.14.1.
-
-
-
-
-
-
-
-
-
-
-
-
-Celi & Hammett             Expires 3 May 2027                  [Page 21]
-
-Internet-Draft        ACVP Symmetric Block Ciphers          October 2026
-
 
    Key1[0] = KEY1
    Key2[0] = KEY2
@@ -1227,13 +988,6 @@ Internet-Draft        ACVP Symmetric Block Ciphers          October 2026
    rely heavily on this section as well.  All of [SP800-38A-Add]
    requirements are covered.  In [AES-XTS], the IEEE outlines the
 
-
-
-Celi & Hammett             Expires 3 May 2027                  [Page 22]
-
-Internet-Draft        ACVP Symmetric Block Ciphers          October 2026
-
-
    encrypt and decrypt operations for AES-XTS.
 
 6.2.2.  AES Requirements Not Covered
@@ -1281,15 +1035,6 @@ Internet-Draft        ACVP Symmetric Block Ciphers          October 2026
    and inverse cipher are tested.  The known answer tests address these
    requirements.
 
-
-
-
-
-Celi & Hammett             Expires 3 May 2027                  [Page 23]
-
-Internet-Draft        ACVP Symmetric Block Ciphers          October 2026
-
-
 6.2.6.  TDES Requirements Not Covered
 
    In [SP800-67r2], Section 3.3 outlines requirements for keys for
@@ -1330,21 +1075,6 @@ Internet-Draft        ACVP Symmetric Block Ciphers          October 2026
    Sections 6 and 7 outline the specific ciphers in both encrypt and
    decrypt directions.  All facsets of these processes are tested with
    random data via the Algorithm Functional Tests.
-
-
-
-
-
-
-
-
-
-
-
-Celi & Hammett             Expires 3 May 2027                  [Page 24]
-
-Internet-Draft        ACVP Symmetric Block Ciphers          October 2026
-
 
 6.2.10.  KeyWrap Requirements Not Covered
 
@@ -1387,21 +1117,6 @@ Internet-Draft        ACVP Symmetric Block Ciphers          October 2026
    algorithms array.  Each element in the prereqVals array MUST contain
    the following properties
 
-
-
-
-
-
-
-
-
-
-
-Celi & Hammett             Expires 3 May 2027                  [Page 25]
-
-Internet-Draft        ACVP Symmetric Block Ciphers          October 2026
-
-
         +===============+=============================+===========+
         | JSON Property | Description                 | JSON Type |
         +===============+=============================+===========+
@@ -1439,24 +1154,6 @@ Internet-Draft        ACVP Symmetric Block Ciphers          October 2026
    MUST be validated, either separately or as part of the same
    submission.  ACVP provides a mechanism for specifying the required
    prerequisites:
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-Celi & Hammett             Expires 3 May 2027                  [Page 26]
-
-Internet-Draft        ACVP Symmetric Block Ciphers          October 2026
-
 
    +==============+===================+========+=======================+
    | JSON Value   | Description       | JSON   | Example Values        |
@@ -1506,14 +1203,6 @@ Internet-Draft        ACVP Symmetric Block Ciphers          October 2026
    |                          |direction                  |strings     |
    +--------------------------+---------------------------+------------+
    |keyLen                    |The supported key lengths  |array of    |
-
-
-
-Celi & Hammett             Expires 3 May 2027                  [Page 27]
-
-Internet-Draft        ACVP Symmetric Block Ciphers          October 2026
-
-
    |                          |in bits                    |integers    |
    +--------------------------+---------------------------+------------+
    |payloadLen                |The supported plain and    |domain      |
@@ -1562,14 +1251,6 @@ Internet-Draft        ACVP Symmetric Block Ciphers          October 2026
    |                          |input as a hexadecimal     |            |
    |                          |string.  A value of        |            |
    |                          |"number" indicates that the|            |
-
-
-
-Celi & Hammett             Expires 3 May 2027                  [Page 28]
-
-Internet-Draft        ACVP Symmetric Block Ciphers          October 2026
-
-
    |                          |IUT expects to receive a   |            |
    |                          |Data Unit Sequence Number. |            |
    +--------------------------+---------------------------+------------+
@@ -1618,14 +1299,6 @@ Internet-Draft        ACVP Symmetric Block Ciphers          October 2026
    |                          |that all lengths listed by |            |
    |                          |the dataUnitLen property   |            |
    |                          |are also valid payload     |            |
-
-
-
-Celi & Hammett             Expires 3 May 2027                  [Page 29]
-
-Internet-Draft        ACVP Symmetric Block Ciphers          October 2026
-
-
    |                          |lengths.  As such, the     |            |
    |                          |values for the payloadLen  |            |
    |                          |property MUST include all  |            |
@@ -1671,16 +1344,6 @@ Internet-Draft        ACVP Symmetric Block Ciphers          October 2026
    The following grid outlines which properties are REQUIRED, as well as
    all the possible values a server MAY support for each standard block
    cipher algorithm:
-
-
-
-
-
-
-Celi & Hammett             Expires 3 May 2027                  [Page 30]
-
-Internet-Draft        ACVP Symmetric Block Ciphers          October 2026
-
 
    +=============+==========+=============+========+===================+
    | algorithm   | revision | direction   | keyLen | keyingOption      |
@@ -1730,14 +1393,6 @@ Internet-Draft        ACVP Symmetric Block Ciphers          October 2026
    | TDES-CFB1   | "1.0"    | ["encrypt", |        | [1, 2] Note:      |
    |             |          | "decrypt"]  |        | 2 is only         |
    |             |          |             |        | available         |
-
-
-
-Celi & Hammett             Expires 3 May 2027                  [Page 31]
-
-Internet-Draft        ACVP Symmetric Block Ciphers          October 2026
-
-
    |             |          |             |        | for decrypt       |
    |             |          |             |        | operations        |
    +-------------+----------+-------------+--------+-------------------+
@@ -1787,13 +1442,6 @@ Internet-Draft        ACVP Symmetric Block Ciphers          October 2026
            Table 4: Standard Block Cipher Algorithm Capabilities
                              Applicability Grid
 
-
-
-Celi & Hammett             Expires 3 May 2027                  [Page 32]
-
-Internet-Draft        ACVP Symmetric Block Ciphers          October 2026
-
-
       |  NOTE: keyingOption 2 SHALL only be available for decrypt
       |  operations.
 
@@ -1840,15 +1488,6 @@ Internet-Draft        ACVP Symmetric Block Ciphers          October 2026
     +----------------------------+---------+--------------------------+
 
                 Table 6: Wrapping and Unwrapping Operations
-
-
-
-
-
-Celi & Hammett             Expires 3 May 2027                  [Page 33]
-
-Internet-Draft        ACVP Symmetric Block Ciphers          October 2026
-
 
    The following grid outlines which properties are REQUIRED, as well as
    the possible values a server MAY support for each authenticated block
@@ -1898,14 +1537,6 @@ Internet-Draft        ACVP Symmetric Block Ciphers          October 2026
       |  defined in SP 800-38D section 8.2.1 or the RBG-based
       |  construction defined in SP 800-38D section 8.2.2.
 
-
-
-
-Celi & Hammett             Expires 3 May 2027                  [Page 34]
-
-Internet-Draft        ACVP Symmetric Block Ciphers          October 2026
-
-
       |  NOTE 2: For AES-CCM-ECMA, the IV/NONCE is used to create a pre-
       |  formatted "B_0 block" containing 16-bytes as defined by Fig 113
       |  in ECMA-368 Sec 18.5.
@@ -1952,15 +1583,6 @@ Internet-Draft        ACVP Symmetric Block Ciphers          October 2026
       |  and handled on a per case basis along with the data unit
       |  length.  Both values may be provided in the test case JSON even
       |  when 'dataUnitLenMatchesPayload' is true.
-
-
-
-
-
-Celi & Hammett             Expires 3 May 2027                  [Page 35]
-
-Internet-Draft        ACVP Symmetric Block Ciphers          October 2026
-
 
    The following grid outlines which properties are REQUIRED, as well as
    the possible values a server MAY support for each miscellaneous block
@@ -2010,14 +1632,6 @@ Internet-Draft        ACVP Symmetric Block Ciphers          October 2026
    |         |        |           |      |          |            |               |                  |                   |        |Section 7.3,|
    |         |        |           |      |          |            |               |                  |                   |        |Paragraph 25|
    +---------+--------+-----------+------+----------+------------+---------------+------------------+-------------------+--------+------------+
-
-
-
-Celi & Hammett             Expires 3 May 2027                  [Page 36]
-
-Internet-Draft        ACVP Symmetric Block Ciphers          October 2026
-
-
    |AES-FF3-1|"1.0"   |["encrypt",|[128, |          |            |               |                  |                   |        |At least one|
    |         |        |"decrypt"] |192,  |          |            |               |                  |                   |        |set of      |
    |         |        |           |256]  |          |            |               |                  |                   |        |capabilities|
@@ -2041,38 +1655,6 @@ Internet-Draft        ACVP Symmetric Block Ciphers          October 2026
 
    The following grid outlines which properties are REQUIRED within the
    capabilities object array in use for ACVP-AES-FF1 and ACVP-AES-FF3-1.
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-Celi & Hammett             Expires 3 May 2027                  [Page 37]
-
-Internet-Draft        ACVP Symmetric Block Ciphers          October 2026
-
 
    +========+=======================================+=======+==============++
    |Property|Description                            |Type   |Valid Values  ||
@@ -2120,16 +1702,6 @@ Internet-Draft        ACVP Symmetric Block Ciphers          October 2026
    test vectors to be processed by the ACVP client.  The following table
    describes the JSON elements at the top level of the hierarchy.
 
-
-
-
-
-
-Celi & Hammett             Expires 3 May 2027                  [Page 38]
-
-Internet-Draft        ACVP Symmetric Block Ciphers          October 2026
-
-
     +=============+======================================+===========+
     | JSON Values | Description                          | JSON Type |
     +=============+======================================+===========+
@@ -2176,15 +1748,6 @@ Internet-Draft        ACVP Symmetric Block Ciphers          October 2026
    applies to all test cases within the group.  The following table
    describes the JSON elements that MAY appear from the server in the
    Test Group JSON object:
-
-
-
-
-
-Celi & Hammett             Expires 3 May 2027                  [Page 39]
-
-Internet-Draft        ACVP Symmetric Block Ciphers          October 2026
-
 
     +==============+=======================================+==========+
     | JSON Value   | Description                           | JSON     |
@@ -2234,14 +1797,6 @@ Internet-Draft        ACVP Symmetric Block Ciphers          October 2026
     |              | value input for AES-XTS.  A value of  |          |
     |              | 'hex' indicates that the test cases   |          |
     |              | in the test group will contain a      |          |
-
-
-
-Celi & Hammett             Expires 3 May 2027                  [Page 40]
-
-Internet-Draft        ACVP Symmetric Block Ciphers          October 2026
-
-
     |              | 'tweakValue' element with a           |          |
     |              | 32-character hexadecimal string for a |          |
     |              | value.  A value of 'number' indicates |          |
@@ -2272,31 +1827,6 @@ Internet-Draft        ACVP Symmetric Block Ciphers          October 2026
    for the test vector set.  The following grid defines the REQUIRED
    properties for each standard block cipher, as well as the valid
    values a server MAY use:
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-Celi & Hammett             Expires 3 May 2027                  [Page 41]
-
-Internet-Draft        ACVP Symmetric Block Ciphers          October 2026
-
 
       +==================+==========+===============+==============+
       | algorithm        | revision | keyLen        | keyingOption |
@@ -2345,15 +1875,6 @@ Internet-Draft        ACVP Symmetric Block Ciphers          October 2026
    The following grid defines when each property is REQUIRED from a
    server for each authenticated block cipher:
 
-
-
-
-
-Celi & Hammett             Expires 3 May 2027                  [Page 42]
-
-Internet-Draft        ACVP Symmetric Block Ciphers          October 2026
-
-
    +=========+========+======+===========+=========+===========+======+==========+======+======+=======+
    |algorithm|revision|keyLen|ivGen      |ivGenMode|saltGen    |ivLen |payloadLen|aadLen|tagLen|saltLen|
    +=========+========+======+===========+=========+===========+======+==========+======+======+=======+
@@ -2401,15 +1922,6 @@ Internet-Draft        ACVP Symmetric Block Ciphers          October 2026
 
    Table 15: Prompt Test Group Key-Wrap Block Cipher Applicability Grid
 
-
-
-
-
-Celi & Hammett             Expires 3 May 2027                  [Page 43]
-
-Internet-Draft        ACVP Symmetric Block Ciphers          October 2026
-
-
       |  NOTE: The particular values of a domain are REQUIRED to be an
       |  integer element of the domain present in the registration used.
       |  The ACVP server MAY select predetermined or random values with
@@ -2419,52 +1931,6 @@ Internet-Draft        ACVP Symmetric Block Ciphers          October 2026
 
    The following grid defines when each property is REQUIRED from a
    server for the miscellaneous block ciphers:
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-Celi & Hammett             Expires 3 May 2027                  [Page 44]
-
-Internet-Draft        ACVP Symmetric Block Ciphers          October 2026
-
 
    +=========+========+======+============+===========+========+=========+==========+
    |algorithm|revision|keyLen|keyingOption|incremental|overflow|tweakMode|payloadLen|
@@ -2512,15 +1978,6 @@ Internet-Draft        ACVP Symmetric Block Ciphers          October 2026
       |  particular features (ex. on a block boundary, or not on a block
       |  boundary) within the domain the client provided in the
       |  registration.
-
-
-
-
-
-Celi & Hammett             Expires 3 May 2027                  [Page 45]
-
-Internet-Draft        ACVP Symmetric Block Ciphers          October 2026
-
 
 8.2.  Test Cases
 
@@ -2570,14 +2027,6 @@ Internet-Draft        ACVP Symmetric Block Ciphers          October 2026
       |                |                                  | (hex)   |
       +----------------+----------------------------------+---------+
       | ct             | Ciphertext to use                | string  |
-
-
-
-Celi & Hammett             Expires 3 May 2027                  [Page 46]
-
-Internet-Draft        ACVP Symmetric Block Ciphers          October 2026
-
-
       |                |                                  | (hex)   |
       +----------------+----------------------------------+---------+
       | payloadLen     | The length of the provided       | integer |
@@ -2607,32 +2056,6 @@ Internet-Draft        ACVP Symmetric Block Ciphers          October 2026
    The following grid identifies the algorithms whose test case JSON
    objects will contain the 'payloadLen' property and the valid values a
    servery MAY use.
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-Celi & Hammett             Expires 3 May 2027                  [Page 47]
-
-Internet-Draft        ACVP Symmetric Block Ciphers          October 2026
-
 
    +==================+==========+======================+=============+
    | Algorithm        | Revision | Applicability        | payloadLen  |
@@ -2676,20 +2099,6 @@ Internet-Draft        ACVP Symmetric Block Ciphers          October 2026
    timeframe.  The following table describes the JSON object that
    represents a vector set response.
 
-
-
-
-
-
-
-
-
-
-Celi & Hammett             Expires 3 May 2027                  [Page 48]
-
-Internet-Draft        ACVP Symmetric Block Ciphers          October 2026
-
-
     +============+=======================================+===========+
     | JSON Value | Description                           | JSON type |
     +============+=======================================+===========+
@@ -2724,27 +2133,6 @@ Internet-Draft        ACVP Symmetric Block Ciphers          October 2026
    Each test case is a JSON object that represents a single test object
    to be processed by the ACVP client.  The following table describes
    the JSON elements for each test case object.
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-Celi & Hammett             Expires 3 May 2027                  [Page 49]
-
-Internet-Draft        ACVP Symmetric Block Ciphers          October 2026
-
 
     +==============+==============================+==================+
     | JSON Value   | Description                  | JSON type        |
@@ -2793,15 +2181,6 @@ Internet-Draft        ACVP Symmetric Block Ciphers          October 2026
               DOI 10.17487/RFC2119, March 1997,
               <https://www.rfc-editor.org/info/rfc2119>.
 
-
-
-
-
-Celi & Hammett             Expires 3 May 2027                  [Page 50]
-
-Internet-Draft        ACVP Symmetric Block Ciphers          October 2026
-
-
    [RFC8174]  Leiba, B., "Ambiguity of Uppercase vs Lowercase in RFC
               2119 Key Words", RFC 8174, RFC 8174, DOI 10.17487/RFC8174,
               May 2017, <https://www.rfc-editor.org/info/rfc8174>.
@@ -2845,18 +2224,6 @@ Internet-Draft        ACVP Symmetric Block Ciphers          October 2026
               Operation - Methods for Format-Preserving Encryption",
               NIST SP 800-38G, August 2016,
               <https://csrc.nist.gov/pubs/sp/800/38/g/upd1/final>.
-
-
-
-
-
-
-
-
-Celi & Hammett             Expires 3 May 2027                  [Page 51]
-
-Internet-Draft        ACVP Symmetric Block Ciphers          October 2026
-
 
    [SP800-67r2]
               Barker, E. B. and N. Mouha, "Recommendation for the Triple
@@ -2906,14 +2273,6 @@ Appendix A.  Example Capabilities JSON Object
            "algorithm": "ACVP-AES-ECB",
            "valValue": "123456"
          },
-
-
-
-Celi & Hammett             Expires 3 May 2027                  [Page 52]
-
-Internet-Draft        ACVP Symmetric Block Ciphers          October 2026
-
-
          {
            "algorithm": "DRBG",
            "valValue": "123456"
@@ -2962,14 +2321,6 @@ Internet-Draft        ACVP Symmetric Block Ciphers          October 2026
      {
        "algorithm": "ACVP-AES-CBC",
        "revision": "1.0",
-
-
-
-Celi & Hammett             Expires 3 May 2027                  [Page 53]
-
-Internet-Draft        ACVP Symmetric Block Ciphers          October 2026
-
-
        "direction": [
          "encrypt",
          "decrypt"
@@ -3018,14 +2369,6 @@ Internet-Draft        ACVP Symmetric Block Ciphers          October 2026
      },
      {
        "algorithm": "ACVP-AES-CBC-CS3",
-
-
-
-Celi & Hammett             Expires 3 May 2027                  [Page 54]
-
-Internet-Draft        ACVP Symmetric Block Ciphers          October 2026
-
-
        "revision": "1.0",
        "payloadLen": [{
          "min": 128,
@@ -3074,14 +2417,6 @@ Internet-Draft        ACVP Symmetric Block Ciphers          October 2026
        "direction": [
          "encrypt",
          "decrypt"
-
-
-
-Celi & Hammett             Expires 3 May 2027                  [Page 55]
-
-Internet-Draft        ACVP Symmetric Block Ciphers          October 2026
-
-
        ],
        "keyLen": [
          128,
@@ -3130,14 +2465,6 @@ Internet-Draft        ACVP Symmetric Block Ciphers          October 2026
        "algorithm": "ACVP-AES-CTR",
        "revision": "1.0",
        "direction": [
-
-
-
-Celi & Hammett             Expires 3 May 2027                  [Page 56]
-
-Internet-Draft        ACVP Symmetric Block Ciphers          October 2026
-
-
          "encrypt",
          "decrypt"
        ],
@@ -3186,14 +2513,6 @@ Internet-Draft        ACVP Symmetric Block Ciphers          October 2026
        "keyLen": [
          128,
          192,
-
-
-
-Celi & Hammett             Expires 3 May 2027                  [Page 57]
-
-Internet-Draft        ACVP Symmetric Block Ciphers          October 2026
-
-
          256
        ],
        "tagLen": [
@@ -3242,14 +2561,6 @@ Internet-Draft        ACVP Symmetric Block Ciphers          October 2026
        "payloadLen": [
          512,
          192,
-
-
-
-Celi & Hammett             Expires 3 May 2027                  [Page 58]
-
-Internet-Draft        ACVP Symmetric Block Ciphers          October 2026
-
-
          128
        ]
      },
@@ -3298,14 +2609,6 @@ Internet-Draft        ACVP Symmetric Block Ciphers          October 2026
            "minLen": 10,
            "maxLen": 56
          },
-
-
-
-Celi & Hammett             Expires 3 May 2027                  [Page 59]
-
-Internet-Draft        ACVP Symmetric Block Ciphers          October 2026
-
-
          {
            "alphabet": "abcdefghijklmnopqrstuvwxyz",
            "radix": 26,
@@ -3354,14 +2657,6 @@ Internet-Draft        ACVP Symmetric Block Ciphers          October 2026
            "alphabet": "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz+/",
            "radix": 64,
            "minLen": 10,
-
-
-
-Celi & Hammett             Expires 3 May 2027                  [Page 60]
-
-Internet-Draft        ACVP Symmetric Block Ciphers          October 2026
-
-
            "maxLen": 28
          }
        ]
@@ -3410,14 +2705,6 @@ Internet-Draft        ACVP Symmetric Block Ciphers          October 2026
      {
        "algorithm": "ACVP-TDES-ECB",
        "revision": "1.0",
-
-
-
-Celi & Hammett             Expires 3 May 2027                  [Page 61]
-
-Internet-Draft        ACVP Symmetric Block Ciphers          October 2026
-
-
        "direction": [
          "encrypt",
          "decrypt"
@@ -3466,14 +2753,6 @@ Internet-Draft        ACVP Symmetric Block Ciphers          October 2026
          "encrypt",
          "decrypt"
        ],
-
-
-
-Celi & Hammett             Expires 3 May 2027                  [Page 62]
-
-Internet-Draft        ACVP Symmetric Block Ciphers          October 2026
-
-
        "keyingOption": [
          1
        ]
@@ -3522,14 +2801,6 @@ Internet-Draft        ACVP Symmetric Block Ciphers          October 2026
          1
        ]
      },
-
-
-
-Celi & Hammett             Expires 3 May 2027                  [Page 63]
-
-Internet-Draft        ACVP Symmetric Block Ciphers          October 2026
-
-
      {
        "algorithm": "ACVP-TDES-CFBP8",
        "revision": "1.0",
@@ -3578,14 +2849,6 @@ Internet-Draft        ACVP Symmetric Block Ciphers          October 2026
          "cipher"
        ],
        "payloadLen": [
-
-
-
-Celi & Hammett             Expires 3 May 2027                  [Page 64]
-
-Internet-Draft        ACVP Symmetric Block Ciphers          October 2026
-
-
          512,
          192,
          128
@@ -3634,14 +2897,6 @@ Appendix B.  Example Vector Set Request/Responses JSON Object
                        "key": "934865822A3ECCB...",
                        "aad": "",
                        "iv": "273F3B30341C779E..."
-
-
-
-Celi & Hammett             Expires 3 May 2027                  [Page 65]
-
-Internet-Draft        ACVP Symmetric Block Ciphers          October 2026
-
-
                    }
          ]
        },
@@ -3679,24 +2934,6 @@ Internet-Draft        ACVP Symmetric Block Ciphers          October 2026
    }]
 
    The following shows AES-GCM AFT responses.
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-Celi & Hammett             Expires 3 May 2027                  [Page 66]
-
-Internet-Draft        ACVP Symmetric Block Ciphers          October 2026
-
 
    [{
      "acvVersion": "{acvp-version}"
@@ -3746,14 +2983,6 @@ Internet-Draft        ACVP Symmetric Block Ciphers          October 2026
        "direction": "encrypt",
        "testType": "AFT",
        "ivLen": 56,
-
-
-
-Celi & Hammett             Expires 3 May 2027                  [Page 67]
-
-Internet-Draft        ACVP Symmetric Block Ciphers          October 2026
-
-
        "payloadLen": 256,
        "aadLen": 0,
        "tagLen": 128,
@@ -3797,19 +3026,6 @@ Internet-Draft        ACVP Symmetric Block Ciphers          October 2026
    }]
 
    The following shows AES-CCM AFT responses.
-
-
-
-
-
-
-
-
-Celi & Hammett             Expires 3 May 2027                  [Page 68]
-
-Internet-Draft        ACVP Symmetric Block Ciphers          October 2026
-
-
    [{
      "acvVersion": "{acvp-version}"
    },{
@@ -3858,14 +3074,6 @@ Internet-Draft        ACVP Symmetric Block Ciphers          October 2026
            "tcId": 1,
            "iv": "00C8F42C5B5...",
            "key": "7F9863BCD5...",
-
-
-
-Celi & Hammett             Expires 3 May 2027                  [Page 69]
-
-Internet-Draft        ACVP Symmetric Block Ciphers          October 2026
-
-
            "pt": "97549D671FA..."
          }, {
            "tcId": 2,
@@ -3914,14 +3122,6 @@ Internet-Draft        ACVP Symmetric Block Ciphers          October 2026
          }]
        }
      ]
-
-
-
-Celi & Hammett             Expires 3 May 2027                  [Page 70]
-
-Internet-Draft        ACVP Symmetric Block Ciphers          October 2026
-
-
    }]
 
    The following shows AES-CBC AFT and MCT responses.
@@ -3970,14 +3170,6 @@ Internet-Draft        ACVP Symmetric Block Ciphers          October 2026
                "pt": "3BD32...",
                "ct": "9236D..."
              }
-
-
-
-Celi & Hammett             Expires 3 May 2027                  [Page 71]
-
-Internet-Draft        ACVP Symmetric Block Ciphers          October 2026
-
-
            ]
          }]
        },
@@ -4004,35 +3196,6 @@ Internet-Draft        ACVP Symmetric Block Ciphers          October 2026
    }]
 
    The following shows AES-CBC-CS1 AFT request vectors.
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-Celi & Hammett             Expires 3 May 2027                  [Page 72]
-
-Internet-Draft        ACVP Symmetric Block Ciphers          October 2026
-
 
    [{
      "acvVersion": "{acvp-version}"
@@ -4082,14 +3245,6 @@ Internet-Draft        ACVP Symmetric Block Ciphers          October 2026
 
    The following shows AES-CBC-CS1 AFT responses.
 
-
-
-
-Celi & Hammett             Expires 3 May 2027                  [Page 73]
-
-Internet-Draft        ACVP Symmetric Block Ciphers          October 2026
-
-
    [{
      "acvVersion": "{acvp-version}"
    },{
@@ -4122,29 +3277,6 @@ Internet-Draft        ACVP Symmetric Block Ciphers          October 2026
    }]
 
    The following shows AES-CBC-CS2 AFT request vectors.
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-Celi & Hammett             Expires 3 May 2027                  [Page 74]
-
-Internet-Draft        ACVP Symmetric Block Ciphers          October 2026
-
 
    [{
      "acvVersion": "{acvp-version}"
@@ -4194,14 +3326,6 @@ Internet-Draft        ACVP Symmetric Block Ciphers          October 2026
 
    The following shows AES-CBC-CS2 AFT responses.
 
-
-
-
-Celi & Hammett             Expires 3 May 2027                  [Page 75]
-
-Internet-Draft        ACVP Symmetric Block Ciphers          October 2026
-
-
    [{
      "acvVersion": "{acvp-version}"
    },{
@@ -4234,29 +3358,6 @@ Internet-Draft        ACVP Symmetric Block Ciphers          October 2026
    }]
 
    The following shows AES-CBC-CS3 AFT request vectors.
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-Celi & Hammett             Expires 3 May 2027                  [Page 76]
-
-Internet-Draft        ACVP Symmetric Block Ciphers          October 2026
-
 
    [{
      "acvVersion": "{acvp-version}"
@@ -4306,14 +3407,6 @@ Internet-Draft        ACVP Symmetric Block Ciphers          October 2026
 
    The following shows AES-CBC-CS3 AFT responses.
 
-
-
-
-Celi & Hammett             Expires 3 May 2027                  [Page 77]
-
-Internet-Draft        ACVP Symmetric Block Ciphers          October 2026
-
-
    [{
      "acvVersion": "{acvp-version}"
    },{
@@ -4362,14 +3455,6 @@ Internet-Draft        ACVP Symmetric Block Ciphers          October 2026
                    {
                        "tcId": 1,
                        "plainText": "F34481E...",
-
-
-
-Celi & Hammett             Expires 3 May 2027                  [Page 78]
-
-Internet-Draft        ACVP Symmetric Block Ciphers          October 2026
-
-
                        "key": "0000000000000..."
                    },
                    {
@@ -4418,14 +3503,6 @@ Internet-Draft        ACVP Symmetric Block Ciphers          October 2026
            "tests": [
                    {
                        "tcId": 2142
-
-
-
-Celi & Hammett             Expires 3 May 2027                  [Page 79]
-
-Internet-Draft        ACVP Symmetric Block Ciphers          October 2026
-
-
                        "key": "9489F6FFA4A74...",
                  "ct": "2D984D2F1FC178..."
                    }
@@ -4474,14 +3551,6 @@ Internet-Draft        ACVP Symmetric Block Ciphers          October 2026
                "ct": "619D5B0921..."
              },
              {
-
-
-
-Celi & Hammett             Expires 3 May 2027                  [Page 80]
-
-Internet-Draft        ACVP Symmetric Block Ciphers          October 2026
-
-
                "key": "C5357E575...",
                "pt": "619D5B0921...",
                "ct": "28CF1C5DD2..."
@@ -4530,14 +3599,6 @@ Internet-Draft        ACVP Symmetric Block Ciphers          October 2026
        }, {
          "tcId": 2,
          "iv": "1D1CC64F9F004192B6BE35...",
-
-
-
-Celi & Hammett             Expires 3 May 2027                  [Page 81]
-
-Internet-Draft        ACVP Symmetric Block Ciphers          October 2026
-
-
          "key": "054240C952C99D5B6E387224F...",
          "pt": "EBFA3F5F990B678AA884FB..."
        }]
@@ -4583,16 +3644,6 @@ Internet-Draft        ACVP Symmetric Block Ciphers          October 2026
    }]
 
    The following shows AES-OFB AFT and MCT responses.
-
-
-
-
-
-
-Celi & Hammett             Expires 3 May 2027                  [Page 82]
-
-Internet-Draft        ACVP Symmetric Block Ciphers          October 2026
-
 
    [{
      "acvVersion": "{acvp-version}"
@@ -4642,14 +3693,6 @@ Internet-Draft        ACVP Symmetric Block Ciphers          October 2026
          }]
        },
        {
-
-
-
-Celi & Hammett             Expires 3 May 2027                  [Page 83]
-
-Internet-Draft        ACVP Symmetric Block Ciphers          October 2026
-
-
          "tgId": 4,
          "tests": [{
            "tcId": 64,
@@ -4698,14 +3741,6 @@ Internet-Draft        ACVP Symmetric Block Ciphers          October 2026
          "payloadLen": 1
        }]
      }, {
-
-
-
-Celi & Hammett             Expires 3 May 2027                  [Page 84]
-
-Internet-Draft        ACVP Symmetric Block Ciphers          October 2026
-
-
        "tgId": 2,
        "direction": "decrypt",
        "testType": "AFT",
@@ -4751,16 +3786,6 @@ Internet-Draft        ACVP Symmetric Block Ciphers          October 2026
    }]
 
    The following shows AES-CFB1 AFT and MCT responses.
-
-
-
-
-
-
-Celi & Hammett             Expires 3 May 2027                  [Page 85]
-
-Internet-Draft        ACVP Symmetric Block Ciphers          October 2026
-
 
    [{
      "acvVersion": "{acvp-version}"
@@ -4810,14 +3835,6 @@ Internet-Draft        ACVP Symmetric Block Ciphers          October 2026
          }]
        }, {
          "tgId": 4,
-
-
-
-Celi & Hammett             Expires 3 May 2027                  [Page 86]
-
-Internet-Draft        ACVP Symmetric Block Ciphers          October 2026
-
-
          "tests": [{
            "tcId": 64
            "resultsArray": [{
@@ -4866,14 +3883,6 @@ Internet-Draft        ACVP Symmetric Block Ciphers          October 2026
        "tgId": 2,
        "direction": "decrypt",
        "testType": "AFT",
-
-
-
-Celi & Hammett             Expires 3 May 2027                  [Page 87]
-
-Internet-Draft        ACVP Symmetric Block Ciphers          October 2026
-
-
        "keyLen": 128,
        "tests": [{
          "tcId": 31,
@@ -4922,14 +3931,6 @@ Internet-Draft        ACVP Symmetric Block Ciphers          October 2026
          "tests": [{
              "tcId": 1,
              "ct": "181B"
-
-
-
-Celi & Hammett             Expires 3 May 2027                  [Page 88]
-
-Internet-Draft        ACVP Symmetric Block Ciphers          October 2026
-
-
            },
            {
              "tcId": 2,
@@ -4978,14 +3979,6 @@ Internet-Draft        ACVP Symmetric Block Ciphers          October 2026
                "ct": "83",
                "pt": "E6"
              },
-
-
-
-Celi & Hammett             Expires 3 May 2027                  [Page 89]
-
-Internet-Draft        ACVP Symmetric Block Ciphers          October 2026
-
-
              {
                "key": "31A0B0001A...",
                "iv": "DB973F16E5D...",
@@ -5034,14 +4027,6 @@ Internet-Draft        ACVP Symmetric Block Ciphers          October 2026
          "ct": "5B12E9B418F720C344698..."
        }, {
          "tcId": 32,
-
-
-
-Celi & Hammett             Expires 3 May 2027                  [Page 90]
-
-Internet-Draft        ACVP Symmetric Block Ciphers          October 2026
-
-
          "iv": "D571797F5623F8442C2CE...",
          "key": "6559CA840CF8360A8AF7...",
          "ct": "0A17C2F7A82BBDE588262..."
@@ -5090,14 +4075,6 @@ Internet-Draft        ACVP Symmetric Block Ciphers          October 2026
          ]
        },
        {
-
-
-
-Celi & Hammett             Expires 3 May 2027                  [Page 91]
-
-Internet-Draft        ACVP Symmetric Block Ciphers          October 2026
-
-
          "tgId": 2,
          "tests": [{
              "tcId": 31,
@@ -5146,14 +4123,6 @@ Internet-Draft        ACVP Symmetric Block Ciphers          October 2026
              }
            ]
          }]
-
-
-
-Celi & Hammett             Expires 3 May 2027                  [Page 92]
-
-Internet-Draft        ACVP Symmetric Block Ciphers          October 2026
-
-
        }
      ]
    }]
@@ -5202,14 +4171,6 @@ Internet-Draft        ACVP Symmetric Block Ciphers          October 2026
          "iv": "9877D2AB7568CEF28BA945B046BA20BE",
          "ct": "09F4EEF2322BE13D75FF6DA86E8617B5"
        }]
-
-
-
-Celi & Hammett             Expires 3 May 2027                  [Page 93]
-
-Internet-Draft        ACVP Symmetric Block Ciphers          October 2026
-
-
      }, {
        "tgId": 3,
        "direction": "encrypt",
@@ -5225,46 +4186,6 @@ Internet-Draft        ACVP Symmetric Block Ciphers          October 2026
    }]
 
    The following shows AES-CTR AFT and counter responses.
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-Celi & Hammett             Expires 3 May 2027                  [Page 94]
-
-Internet-Draft        ACVP Symmetric Block Ciphers          October 2026
-
 
    [{
      "acvVersion": "{acvp-version}"
@@ -5306,21 +4227,6 @@ Internet-Draft        ACVP Symmetric Block Ciphers          October 2026
 
    The following shows AES-CTR RFC3686 request vectors with internal iv
    generation.
-
-
-
-
-
-
-
-
-
-
-
-Celi & Hammett             Expires 3 May 2027                  [Page 95]
-
-Internet-Draft        ACVP Symmetric Block Ciphers          October 2026
-
 
    {
            "vsId": 1,
@@ -5368,15 +4274,6 @@ Internet-Draft        ACVP Symmetric Block Ciphers          October 2026
                    }
            ]
    }
-
-
-
-
-
-Celi & Hammett             Expires 3 May 2027                  [Page 96]
-
-Internet-Draft        ACVP Symmetric Block Ciphers          October 2026
-
 
    The following shows AES-CTR RFC3686 with internal iv generation
    responses.
@@ -5426,14 +4323,6 @@ Internet-Draft        ACVP Symmetric Block Ciphers          October 2026
            "testGroups": [{
                            "tgId": 1,
                            "testType": "AFT",
-
-
-
-Celi & Hammett             Expires 3 May 2027                  [Page 97]
-
-Internet-Draft        ACVP Symmetric Block Ciphers          October 2026
-
-
                            "direction": "encrypt",
                            "keyLen": 128,
                            "tests": [{
@@ -5479,17 +4368,6 @@ Internet-Draft        ACVP Symmetric Block Ciphers          October 2026
    The following shows AES-CTR RFC3686 with external iv generation
    responses.
 
-
-
-
-
-
-
-Celi & Hammett             Expires 3 May 2027                  [Page 98]
-
-Internet-Draft        ACVP Symmetric Block Ciphers          October 2026
-
-
    {
            "vsId": 0,
            "algorithm": "ACVP-AES-CTR",
@@ -5524,27 +4402,6 @@ Internet-Draft        ACVP Symmetric Block Ciphers          October 2026
    }
 
    The following shows AES-XPN AFT request vectors.
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-Celi & Hammett             Expires 3 May 2027                  [Page 99]
-
-Internet-Draft        ACVP Symmetric Block Ciphers          October 2026
-
 
    [{
      "acvVersion": "{acvp-version}"
@@ -5590,18 +4447,6 @@ Internet-Draft        ACVP Symmetric Block Ciphers          October 2026
 
    The following shows AES-XPN AFT responses.
 
-
-
-
-
-
-
-
-Celi & Hammett             Expires 3 May 2027                 [Page 100]
-
-Internet-Draft        ACVP Symmetric Block Ciphers          October 2026
-
-
    [{
      "acvVersion": "{acvp-version}"
    },{
@@ -5625,38 +4470,6 @@ Internet-Draft        ACVP Symmetric Block Ciphers          October 2026
    }]
 
    The following shows AES-XTS 1.0 AFT request vectors.
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-Celi & Hammett             Expires 3 May 2027                 [Page 101]
-
-Internet-Draft        ACVP Symmetric Block Ciphers          October 2026
-
 
    [{
      "acvVersion": "{acvp-version}"
@@ -5704,15 +4517,6 @@ Internet-Draft        ACVP Symmetric Block Ciphers          October 2026
    }]
 
    The following shows AES-XTS 1.0 AFT responses.
-
-
-
-
-
-Celi & Hammett             Expires 3 May 2027                 [Page 102]
-
-Internet-Draft        ACVP Symmetric Block Ciphers          October 2026
-
 
    [{
      "acvVersion": "{acvp-version}"
@@ -5762,14 +4566,6 @@ Internet-Draft        ACVP Symmetric Block Ciphers          October 2026
        "tests": [{
          "tcId": 1,
          "key": "2866E3659E11C7890313EDAC9...",
-
-
-
-Celi & Hammett             Expires 3 May 2027                 [Page 103]
-
-Internet-Draft        ACVP Symmetric Block Ciphers          October 2026
-
-
          "tweakValue": "C7850E1C99DA28C5E7...",
          "pt": "03F912D53EA625A7D206002864...",
          "payloadLen": 2048,
@@ -5808,24 +4604,6 @@ Internet-Draft        ACVP Symmetric Block Ciphers          October 2026
 
    The following shows AES-XTS 2.0 AFT responses.
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-Celi & Hammett             Expires 3 May 2027                 [Page 104]
-
-Internet-Draft        ACVP Symmetric Block Ciphers          October 2026
-
-
    [{
      "acvVersion": "{acvp-version}"
    },{
@@ -5858,29 +4636,6 @@ Internet-Draft        ACVP Symmetric Block Ciphers          October 2026
    }]
 
    The following shows AES-KW request vectors.
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-Celi & Hammett             Expires 3 May 2027                 [Page 105]
-
-Internet-Draft        ACVP Symmetric Block Ciphers          October 2026
-
 
    [{
      "acvVersion": "{acvp-version}"
@@ -5925,19 +4680,6 @@ Internet-Draft        ACVP Symmetric Block Ciphers          October 2026
 
    The following shows AES-KW responses.
 
-
-
-
-
-
-
-
-
-Celi & Hammett             Expires 3 May 2027                 [Page 106]
-
-Internet-Draft        ACVP Symmetric Block Ciphers          October 2026
-
-
    [{
      "acvVersion": "{acvp-version}"
    },{
@@ -5970,29 +4712,6 @@ Internet-Draft        ACVP Symmetric Block Ciphers          October 2026
    }]
 
    The following shows AES-KWP request vectors.
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-Celi & Hammett             Expires 3 May 2027                 [Page 107]
-
-Internet-Draft        ACVP Symmetric Block Ciphers          October 2026
-
 
    [{
      "acvVersion": "{acvp-version}"
@@ -6036,19 +4755,6 @@ Internet-Draft        ACVP Symmetric Block Ciphers          October 2026
    }]
 
    The following shows AES-KWP responses.
-
-
-
-
-
-
-
-
-
-Celi & Hammett             Expires 3 May 2027                 [Page 108]
-
-Internet-Draft        ACVP Symmetric Block Ciphers          October 2026
-
 
    [{
      "acvVersion": "{acvp-version}"
@@ -6098,14 +4804,6 @@ Internet-Draft        ACVP Symmetric Block Ciphers          October 2026
          "tests": [{
              "tcId": 1,
              "tweak": "",
-
-
-
-Celi & Hammett             Expires 3 May 2027                 [Page 109]
-
-Internet-Draft        ACVP Symmetric Block Ciphers          October 2026
-
-
              "tweakLen": 0,
              "pt": "5989891000",
              "key": "FA407521178EDB931997C9EF5FF4F8BB"
@@ -6154,14 +4852,6 @@ Internet-Draft        ACVP Symmetric Block Ciphers          October 2026
              "tweak": "",
              "tweakLen": 0,
              "key": "82DD08D210EB34C9743EC102E058CEE3",
-
-
-
-Celi & Hammett             Expires 3 May 2027                 [Page 110]
-
-Internet-Draft        ACVP Symmetric Block Ciphers          October 2026
-
-
              "ct": "8416752187"
            },
            {
@@ -6177,46 +4867,6 @@ Internet-Draft        ACVP Symmetric Block Ciphers          October 2026
    }
 
    The following shows AES-FF1 responses.
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-Celi & Hammett             Expires 3 May 2027                 [Page 111]
-
-Internet-Draft        ACVP Symmetric Block Ciphers          October 2026
-
 
    {
      "vsId": 42,
@@ -6264,16 +4914,6 @@ Internet-Draft        ACVP Symmetric Block Ciphers          October 2026
 
    The following shows AES-FF3-1 request vectors.
 
-
-
-
-
-
-Celi & Hammett             Expires 3 May 2027                 [Page 112]
-
-Internet-Draft        ACVP Symmetric Block Ciphers          October 2026
-
-
    {
      "vsId": 42,
      "algorithm": "ACVP-AES-FF3-1",
@@ -6309,27 +4949,6 @@ Internet-Draft        ACVP Symmetric Block Ciphers          October 2026
 
    The following shows AES-FF-31 responses.
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-Celi & Hammett             Expires 3 May 2027                 [Page 113]
-
-Internet-Draft        ACVP Symmetric Block Ciphers          October 2026
-
-
    {
      "vsId": 42,
      "algorithm": "ACVP-AES-FF3-1",
@@ -6357,34 +4976,6 @@ Appendix C.  Example TDES Test and Results JSON Object
    The following is a example JSON object for test vectors sent from the
    ACVP server to the crypto module for an TDES-ECB algorithm functional
    test.
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-Celi & Hammett             Expires 3 May 2027                 [Page 114]
-
-Internet-Draft        ACVP Symmetric Block Ciphers          October 2026
-
 
    [{
      "acvVersion": "{acvp-version}"
@@ -6434,14 +5025,6 @@ Internet-Draft        ACVP Symmetric Block Ciphers          October 2026
        }]
    }]
 
-
-
-
-Celi & Hammett             Expires 3 May 2027                 [Page 115]
-
-Internet-Draft        ACVP Symmetric Block Ciphers          October 2026
-
-
    The following is a example JSON object for test vectors sent from the
    ACVP server to the crypto module for the TDES-CFB1 algorithm
    functional test.
@@ -6489,15 +5072,6 @@ Internet-Draft        ACVP Symmetric Block Ciphers          October 2026
    crypto module to the ACVP server for an TDES-CFB1 algorithm
    functional test.
 
-
-
-
-
-Celi & Hammett             Expires 3 May 2027                 [Page 116]
-
-Internet-Draft        ACVP Symmetric Block Ciphers          October 2026
-
-
    [{
      "acvVersion": "{acvp-version}"
    },{
@@ -6540,20 +5114,6 @@ Appendix D.  Example TDES MCT Test and Results JSON Object
    The following is a example JSON object for test vectors sent from the
    ACVP server to the crypto module for an TDES-ECB Monte Carlo test.
 
-
-
-
-
-
-
-
-
-
-Celi & Hammett             Expires 3 May 2027                 [Page 117]
-
-Internet-Draft        ACVP Symmetric Block Ciphers          October 2026
-
-
    [{
      "acvVersion": "{acvp-version}"
    },{
@@ -6579,36 +5139,6 @@ Internet-Draft        ACVP Symmetric Block Ciphers          October 2026
    only 2 iterations shown for brevity.  For MCT results of each
    iteration are fed into the next iteration.  Therefore the results
    carry all fields to assist in any failure diagnosis.
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-Celi & Hammett             Expires 3 May 2027                 [Page 118]
-
-Internet-Draft        ACVP Symmetric Block Ciphers          October 2026
-
 
    [{
      "acvVersion": "{acvp-version}"
@@ -6644,21 +5174,5 @@ Authors' Addresses
 
 
    Russell Hammett (editor)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 Celi & Hammett             Expires 3 May 2027                 [Page 119]

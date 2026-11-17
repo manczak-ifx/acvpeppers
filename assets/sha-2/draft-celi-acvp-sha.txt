@@ -50,14 +50,6 @@ Table of Contents
        4.2.1.  Prompt  . . . . . . . . . . . . . . . . . . . . . . .   3
        4.2.2.  Registration  . . . . . . . . . . . . . . . . . . . .   3
        4.2.3.  Response  . . . . . . . . . . . . . . . . . . . . . .   3
-
-
-
-Celi                      Expires 29 April 2027                 [Page 1]
-
-Internet-Draft                  ACVP SHA                    October 2026
-
-
        4.2.4.  Test Case . . . . . . . . . . . . . . . . . . . . . .   3
        4.2.5.  Test Group  . . . . . . . . . . . . . . . . . . . . .   3
        4.2.6.  Test Vector Set . . . . . . . . . . . . . . . . . . .   3
@@ -105,14 +97,6 @@ Internet-Draft                  ACVP SHA                    October 2026
    specification addresses a specific class of crypto algorithms.  This
    sub-specification defines the JSON constructs for testing Secure Hash
    Algorithm (SHA) implementations using ACVP.
-
-
-
-
-Celi                      Expires 29 April 2027                 [Page 2]
-
-Internet-Draft                  ACVP SHA                    October 2026
-
 
    This document is a work-product of the NIST (https://www.nist.gov/)
    Cryptographic Algorithm Validation Program
@@ -163,13 +147,6 @@ Internet-Draft                  ACVP SHA                    October 2026
    A collection of test groups under a specific algorithm, mode, and
    revision
 
-
-
-Celi                      Expires 29 April 2027                 [Page 3]
-
-Internet-Draft                  ACVP SHA                    October 2026
-
-
 4.2.7.  Validation
 
    JSON sent from the server to the client that specifies the
@@ -218,14 +195,6 @@ Internet-Draft                  ACVP SHA                    October 2026
       under test must process the test vectors according to the correct
       algorithm and mode in this document.  MCTs can help detect
       potential memory leaks over time, and problems in allocation of
-
-
-
-Celi                      Expires 29 April 2027                 [Page 4]
-
-Internet-Draft                  ACVP SHA                    October 2026
-
-
       resources, addressing variables, error handling, and generally
       improper behavior in response to random inputs.  Each MCT
       processes 100 pseudorandom tests.  Each algorithm and mode SHOULD
@@ -272,15 +241,6 @@ Internet-Draft                  ACVP SHA                    October 2026
        SEED = MD
 
    SHA-1 and SHA-2 Alternate Monte Carlo Test:
-
-
-
-
-
-Celi                      Expires 29 April 2027                 [Page 5]
-
-Internet-Draft                  ACVP SHA                    October 2026
-
 
    INITIAL_SEED_LENGTH = LEN(SEED)
    For j = 0 to 99
@@ -330,14 +290,6 @@ Internet-Draft                  ACVP SHA                    October 2026
       shown, the final large message would have the form
       "DE26DE26DE26...DE26".
 
-
-
-
-Celi                      Expires 29 April 2027                 [Page 6]
-
-Internet-Draft                  ACVP SHA                    October 2026
-
-
    There are multiple ways hash functions can be implemented in an IUT.
    The most common are via a single Hash() call on the message or via a
    series of Init(), any number of Update(), Final() calls.  As noted in
@@ -386,14 +338,6 @@ Internet-Draft                  ACVP SHA                    October 2026
    the 'algorithms' value of the ACVP registration message.  The
    'algorithms' value is an array, where each array element is an
    individual JSON object defined in this section.  The 'algorithms'
-
-
-
-Celi                      Expires 29 April 2027                 [Page 7]
-
-Internet-Draft                  ACVP SHA                    October 2026
-
-
    value is part of the 'capability_exchange' element of the ACVP JSON
    registration message.  See the ACVP specification [ACVP] for more
    details on the registration message.
@@ -441,15 +385,6 @@ Internet-Draft                  ACVP SHA                    October 2026
      }
    ]
 
-
-
-
-
-Celi                      Expires 29 April 2027                 [Page 8]
-
-Internet-Draft                  ACVP SHA                    October 2026
-
-
 7.2.  HASH Algorithm Capabilities Registration
 
    This section describes the constructs for advertising support of hash
@@ -492,19 +427,6 @@ Internet-Draft                  ACVP SHA                    October 2026
 
    The following is a example JSON object advertising support for SHA-
    256.
-
-
-
-
-
-
-
-
-
-Celi                      Expires 29 April 2027                 [Page 9]
-
-Internet-Draft                  ACVP SHA                    October 2026
-
 
    {
        "algorithm": "SHA2-256",
@@ -551,16 +473,6 @@ Internet-Draft                  ACVP SHA                    October 2026
                Table 3: Top Level Test Vector JSON Elements
 
    An example of this would look like this
-
-
-
-
-
-
-Celi                      Expires 29 April 2027                [Page 10]
-
-Internet-Draft                  ACVP SHA                    October 2026
-
 
    [
      {
@@ -610,14 +522,6 @@ Internet-Draft                  ACVP SHA                    October 2026
    All properties described in the previous table MUST appear in the
    prompt file from the server for every testGroup object.
 
-
-
-
-Celi                      Expires 29 April 2027                [Page 11]
-
-Internet-Draft                  ACVP SHA                    October 2026
-
-
 8.2.  Test Case
 
    Each test group SHALL contain an array of one or more test cases.
@@ -666,14 +570,6 @@ Internet-Draft                  ACVP SHA                    October 2026
                    "tgId": 1,
                    "testType": "AFT",
                    "tests": [
-
-
-
-Celi                      Expires 29 April 2027                [Page 12]
-
-Internet-Draft                  ACVP SHA                    October 2026
-
-
                        {
                            "tcId": 0,
                            "len": 0,
@@ -716,19 +612,6 @@ Internet-Draft                  ACVP SHA                    October 2026
            ]
        }
    ]
-
-
-
-
-
-
-
-
-
-Celi                      Expires 29 April 2027                [Page 13]
-
-Internet-Draft                  ACVP SHA                    October 2026
-
 
 8.3.  Test Vector Responses
 
@@ -774,17 +657,6 @@ Internet-Draft                  ACVP SHA                    October 2026
 
    The following table describes the JSON elements for each test case
    object.
-
-
-
-
-
-
-
-Celi                      Expires 29 April 2027                [Page 14]
-
-Internet-Draft                  ACVP SHA                    October 2026
-
 
     +==============+=====================================+============+
     | JSON Value   | Description                         | JSON type  |
@@ -834,14 +706,6 @@ Internet-Draft                  ACVP SHA                    October 2026
                "tgId": 2,
                "tests": [
                    {
-
-
-
-Celi                      Expires 29 April 2027                [Page 15]
-
-Internet-Draft                  ACVP SHA                    October 2026
-
-
                        "tcId": 1028,
                        "resultsArray": [
                            {
@@ -889,15 +753,6 @@ Internet-Draft                  ACVP SHA                    October 2026
               7991, RFC 7991, DOI 10.17487/RFC7991, December 2016,
               <https://www.rfc-editor.org/info/rfc7991>.
 
-
-
-
-
-Celi                      Expires 29 April 2027                [Page 16]
-
-Internet-Draft                  ACVP SHA                    October 2026
-
-
    [RFC8174]  Leiba, B., "Ambiguity of Uppercase vs Lowercase in RFC
               2119 Key Words", RFC 8174, RFC 8174, DOI 10.17487/RFC8174,
               May 2017, <https://www.rfc-editor.org/info/rfc8174>.
@@ -920,33 +775,5 @@ Author's Address
 
    Christopher Celi (editor)
    Email: christopher.celi@nist.gov
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 Celi                      Expires 29 April 2027                [Page 17]

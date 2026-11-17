@@ -1,4 +1,5 @@
 [ ] - Test acvpppers current implementation locally
+    -> Add messages for failed/successful runs
 
 [ ] - Define the cbor format for the test vectors and test results
 

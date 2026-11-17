@@ -1,0 +1,87 @@
+===========================
+| Result Vector Structure |
+===========================
+
+Result Vector Set
++============+==============+========================================+
+| Label      | JSON Values  | Description                            |
++============+==============+========================================+
+| 0          | acvVersion   | Protocol version identifier            |
++------------+--------------+----------------------------------------+
+| 1          | vsId         | Unique numeric identifier for the      |
+|            |              | vector set                             |
++------------+--------------+----------------------------------------+
+| 2          | testGroups   | Array of JSON objects that represent   |
+|            |              | each test vector result, which uses    |
+|            |              | same JSON schema as defined in Section |
+|            |              | 8.2                                    |
++------------+--------------+----------------------------------------+
+
+
+Result Vector Group Elements
++============+==============+========================================+
+| Label      | JSON Values  | Description                            |
++============+==============+========================================+
+| 0          | tgId         | The test group identifier              |
++------------+--------------+----------------------------------------+
+| 1          | tests        | The tests associated to the group      |
+|            |              | specified in tgId                      |
++------------+--------------+----------------------------------------+
+
+
+==============
+| Test Cases |
+==============
+
+AFT
++============+==============+========================================+
+| Label      | JSON Values  | Description                            |
++============+==============+========================================+
+| 0          | tcId         | Numeric identifier for the test case,  |
+|            |              | unique across the entire vector set    |
++------------+--------------+----------------------------------------+
+| 1          | md           | The IUT's message digest response to   |
+|            |              | an AFT or LDT test                     |
++------------+--------------+----------------------------------------+
+| 2          | plainText    | The IUT's pt response to a decrypt     |
+|            | or pt        | test                                   |
++------------+--------------+----------------------------------------+
+| 3          | ct           | The IUT's ct response to an encrypt    |
+|            |              | test                                   |
++------------+--------------+----------------------------------------+
+
+
+MCT
++============+==============+========================================+
+| Label      | JSON Values  | Description                            |
++============+==============+========================================+
+| 0          | tcId         | Numeric identifier for the test case,  |
+|            |              | unique across the entire vector set    |
++------------+--------------+----------------------------------------+
+| 1          | md           | The IUT's message digest response to   |
+|            |              | an AFT or LDT test                     |
++------------+--------------+----------------------------------------+
+| 2          | resultsArray | Array of JSON objects that represent   |
+|            |              | each iteration of an MCT. Each         |
+|            |              | iteration will output the md           |
++------------+--------------+----------------------------------------+
+| 3          | plainText    | The IUT's pt response to a decrypt     |
+|            | or pt        | test                                   |
++------------+--------------+----------------------------------------+
+| 4          | ct           | The IUT's ct response to an encrypt    |
+|            |              | test                                   |
++------------+--------------+----------------------------------------+
+| 5          | key          |                                        |
++------------+--------------+----------------------------------------+
+
+
+LDT
++============+==============+========================================+
+| Label      | JSON Values  | Description                            |
++============+==============+========================================+
+| 0          | tcId         | Numeric identifier for the test case,  |
+|            |              | unique across the entire vector set    |
++------------+--------------+----------------------------------------+
+| 1          | md           | The IUT's message digest response to   |
+|            |              | an AFT or LDT test                     |
++------------+--------------+----------------------------------------+

@@ -1,0 +1,162 @@
+=========================
+| Test Vector Structure |
+=========================
+
+Top Level Test Vector Elements
++============+==============+========================================+
+| Label      | JSON Values  | Description                            |
++============+==============+========================================+
+| 0          | acvVersion   | Protocol version identifier            |
++------------+--------------+----------------------------------------+
+| 1          | vsId         | Unique numeric vector set identifier   |
++------------+--------------+----------------------------------------+
+| 2          | algorithm    | Algorithm defined in the capability    |
+|            |              | exchange                               |
++------------+--------------+----------------------------------------+
+| 3          | mode         | Mode defined in the capability         |
+|            |              | exchange                               |
++------------+--------------+----------------------------------------+
+| 4          | revision     | Protocol test revision selected        |
++------------+--------------+----------------------------------------+
+| 5          | testGroups   | Array of test group JSON objects,      |
+|            |              | which are defined in Section 8.1       |
++------------+--------------+----------------------------------------+
+
+
+Test Group Elements
++============+==============+========================================+
+| Label      | JSON Values  | Description                            |
++============+==============+========================================+
+| 0          | tgId         | Numeric identifier for the test group, |
+|            |              | unique across the entire vector set    |
++------------+--------------+----------------------------------------+
+| 1          | testType     | Test category type (AFT, MCT or LDT).  |
+|            |              | See Section 6 for more information     |
++------------+--------------+----------------------------------------+
+| 2          | mctVersion   | When testType is MCT, the type of MCT  |
+|            |              | being run, i.e., "standard" or         |
+|            |              | "alternate"                            |
++------------+--------------+----------------------------------------+
+| 3          | tests        | Array of individual test case JSON     |
+|            |              | objects, which are defined in          |
+|            |              | Section 8.2                            |
++------------+--------------+----------------------------------------+
+| 4          | direction    | The IUT processing direction: encrypt  |
+|            |              | or decrypt                             |
++------------+--------------+----------------------------------------+
+| 5          | keylen       | Length of key in bits to use           |
++------------+--------------+----------------------------------------+
+
+
+==============
+| Test Cases |
+==============
+
+Overview
++============+==============+========================================+
+| Label      | Test Type    | Description                            |
++============+==============+========================================+
+| 0          | AFT          | These tests can be processed by the    |
+|            |              | client using a normal 'hash'           |
+|            |              | operation. AFTs cause the              |
+|            |              | implementation under test to exercise  |
+|            |              | normal operations on a single block,   |
+|            |              | multiple blocks, or partial blocks. In |
+|            |              | all cases, random data is used. The    |
+|            |              | functional tests are designed to       |
+|            |              | verify that the logical components of  |
+|            |              | the hash function (block chunking,     |
+|            |              | block padding etc.) are operating      |
+|            |              | correctly.                             |
+|            |              | (Algorithm Functional Test)            |
++------------+--------------+----------------------------------------+
+| 1          | MCT          | These tests exercise the               |
+|            |              | implementation under test under        |
+|            |              | strenuous circumstances. The           |
+|            |              | implementation under test must process |
+|            |              | the test vectors according to the      |
+|            |              | correct algorithm and mode in this     |
+|            |              | document. MCTs can help detect         |
+|            |              | potential memory leaks over time, and  |
+|            |              | problems in allocation of resources,   |
+|            |              | addressing variables, error handling,  |
+|            |              | and generally improper behavior in     |
+|            |              | response to random inputs. Each MCT    |
+|            |              | processes 100 pseudorandom tests. Each |
+|            |              | algorithm and mode SHOULD have at      |
+|            |              | least one MCT group.                   |
+|            |              | (Monte Carlo Test)                     |
++------------+--------------+----------------------------------------+
+| 2          | LDT          | This test performs the hash function   |
+|            |              | on a message that is multiple          |
+|            |              | gigabytes in length. This pushes the   |
+|            |              | bounds of 32-bit data types to ensure  |
+|            |              | an implementation can handle all types |
+|            |              | of data. A special structure is needed |
+|            |              | because a multiple gigabyte message    |
+|            |              | cannot be communicated naturally via   |
+|            |              | ACVP.                                  |
+|            |              | (Large Data Test)                      |
++------------+--------------+----------------------------------------+
+
+
+AFT
++============+==============+========================================+
+| Label      | JSON Values  | Description                            |
++============+==============+========================================+
+| 0          | tcId         | Numeric identifier for the test case,  |
+|            |              | unique across the entire vector set    |
++------------+--------------+----------------------------------------+
+| 1          | len          | Length of the message or MCT seed      |
++------------+--------------+----------------------------------------+
+| 2          | msg          | Value of the message or MCT seed in    |
+|            |              | big-endian hex                         |
++------------+--------------+----------------------------------------+
+| 3          | plainText    | Plaintext to use                       |
+|            | or pt        |                                        |
++------------+--------------+----------------------------------------+
+| 4          | key          | Encryption key to use for AES          |
++------------+--------------+----------------------------------------+
+
+
+MCT
++============+==============+========================================+
+| Label      | JSON Values  | Description                            |
++============+==============+========================================+
+| 0          | tcId         | Numeric identifier for the test case,  |
+|            |              | unique across the entire vector set    |
++------------+--------------+----------------------------------------+
+| 1          | len          | Length of the message or MCT seed      |
++------------+--------------+----------------------------------------+
+| 2          | msg          | Value of the message or MCT seed in    |
+|            |              | big-endian hex                         |
++------------+--------------+----------------------------------------+
+| 3          | key          | Encryption key to use for AES          |
++------------+--------------+----------------------------------------+
+| 4          | plainText    | Plaintext to use                       |
+|            | or pt        |                                        |
++------------+--------------+----------------------------------------+
+| 5          | ct           | Ciphertext to use                      |
++------------+--------------+----------------------------------------+
+
+
+LDT
++============+==============+========================================+
+| Label      | JSON Values  | Description                            |
++============+==============+========================================+
+| 0          | tcId         | Numeric identifier for the test case,  |
+|            |              | unique across the entire vector set    |
++------------+--------------+----------------------------------------+
+| 3          | largeMsg     | Object describing the message for an   |
+|            |              | LDT group                              |
++------------+--------------+----------------------------------------+
+| 1          | content      |                                        |
++------------+--------------+----------------------------------------+
+| 2          | content-     |                                        |
+|            | Length       |                                        |
++------------+--------------+----------------------------------------+
+| 3          | fullLength   |                                        |
++------------+--------------+----------------------------------------+
+| 5          | expansion    |                                        |
+|            | Technique    |                                        |
++------------+--------------+----------------------------------------+
